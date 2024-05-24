@@ -1,6 +1,7 @@
 const prisma = require('../lib/prisma');
 const TokenUtils = require('../utils/tokenUtils');
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 
 exports.login = async (req, res) => {
 	const { email, password } = req.body;
@@ -19,7 +20,7 @@ exports.login = async (req, res) => {
 		}
 
 		// Check if password is correct
-		if (user.password !== password) {
+		if (bcrypt.compareSync(password, user.password) === false) {
 			return res.status(401).json({
 				error: 'Invalid password',
 			});

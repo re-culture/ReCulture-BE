@@ -1,6 +1,7 @@
 const userRouter = require('express').Router();
 const userController = require('../../controller/user');
 const prisma = require('../../lib/prisma');
+const bcrypt = require('bcrypt');
 
 /**
  * @swagger
@@ -62,11 +63,12 @@ userRouter.get('/', async (req, res) => {
 userRouter.post('/', async (req, res) => {
 	try {
 		const { name, email, password } = req.body;
+		const encodedPW = bcrypt.hashSync(password, 10);
 		const user = await prisma.user.create({
 			data: {
 				name,
 				email,
-				password,
+				password: encodedPW,
 			},
 		});
 		res.status(200).json(user);

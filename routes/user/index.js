@@ -1,4 +1,5 @@
 const userRouter = require('express').Router();
+const userController = require('../../controller/user');
 const prisma = require('../../lib/prisma');
 
 /**
@@ -28,7 +29,7 @@ userRouter.get('/', async (req, res) => {
 		const users = await prisma.user.findMany();
 		res.status(200).json(users);
 	} catch (error) {
-		res.json({ error: error.message });
+		res.status(400).json({ error: error.message });
 	}
 });
 
@@ -60,16 +61,34 @@ userRouter.get('/', async (req, res) => {
  * */
 userRouter.post('/', async (req, res) => {
 	try {
-		const { name, email } = req.body;
+		const { name, email, password } = req.body;
 		const user = await prisma.user.create({
 			data: {
 				name,
 				email,
+				password,
 			},
 		});
 		res.status(200).json(user);
 	} catch (error) {
-		res.json({ error: error.message });
+		res.status(400).json({ error: error.message });
+	}
+});
+
+userRouter.post('/login', userController.login);
+userRouter.get('/refresh', userController.refresh);
+
+userRouter.get('/:id', async (req, res) => {
+	try {
+		const id = parseInt(req.params.id);
+		const user = await prisma.user.findUnique({
+			where: {
+				id,
+			},
+		});
+		res.status(200).json(user);
+	} catch (error) {
+		res.status(400).json({ error: error.message });
 	}
 });
 

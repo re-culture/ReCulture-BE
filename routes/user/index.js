@@ -17,18 +17,7 @@ const bcrypt = require('bcrypt');
  *             schema:
  *               type: array
  *               items:
- *                 type: object
- *               properties:
- *                 id:
- *                   type: integer
- *                 name:
- *                   type: string
- *                 email:
- *                   type: string
- *                 password:
- *                   type: string
- *                 createdAt:
- *                   type: string
+ *                $ref: '#/components/schemas/User'
  *  */
 userRouter.get('/', async (req, res) => {
   try {
@@ -178,18 +167,7 @@ userRouter.get('/refresh', userController.refresh);
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *             properties:
- *               id:
- *                 type: integer
- *               name:
- *                 type: string
- *               email:
- *                 type: string
- *               password:
- *                 type: string
- *               createdAt:
- *                 type: string
+ *               $ref: '#/components/schemas/User'
  * */
 userRouter.get('/:id', async (req, res) => {
   try {

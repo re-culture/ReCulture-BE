@@ -14,7 +14,9 @@
 	"description": "",
 	"devDependencies": {
 		"nodemon": "^3.1.0",
-		"prisma": "^5.14.0"
+		"prisma": "^5.14.0",
+		"swagger-jsdoc": "^6.2.8",
+		"swagger-ui-express": "^5.0.0"
 	},
 	"dependencies": {
 		"@prisma/client": "^5.14.0",

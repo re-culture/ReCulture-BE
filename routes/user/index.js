@@ -1,7 +1,5 @@
 const userRouter = require('express').Router();
-const userController = require('../../controller/user');
-const prisma = require('../../lib/prisma');
-const bcrypt = require('bcrypt');
+const userController = require('../../controller/user.controller');
 
 /**
  * @swagger
@@ -19,14 +17,7 @@ const bcrypt = require('bcrypt');
  *               items:
  *                $ref: '#/components/schemas/User'
  *  */
-userRouter.get('/', async (req, res) => {
-  try {
-    const users = await prisma.user.findMany();
-    res.status(200).json(users);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
-});
+userRouter.get('/', userController.getAllUsers);
 
 /**
  * @swagger
@@ -66,89 +57,7 @@ userRouter.get('/', async (req, res) => {
  *               createdAt:
  *                 type: string
  * */
-userRouter.post('/', async (req, res) => {
-  try {
-    const { name, email, password } = req.body;
-    const encodedPW = bcrypt.hashSync(password, 10);
-    const user = await prisma.user.create({
-      data: {
-        name,
-        email,
-        password: encodedPW,
-      },
-    });
-    res.status(200).json(user);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
-});
-
-/**
- * @swagger
- * /user/login:
- *  post:
- *    summary: Login to user
- *    tags: [User]
- *    requestBody:
- *      required: true
- *      content:
- *        application/json:
- *          schema:
- *            type: object
- *            properties:
- *              email:
- *                type: string
- *              password:
- *                type: string
- *    responses:
- *        '200':
- *          description: Login to user
- *          content:
- *            application/json:
- *              schema:
- *                type: object
- *                properties:
- *                  id:
- *                    type: integer
- *                  accessToken:
- *                    type: string
- *                  refreshToken:
- *                    type: string
- * */
-userRouter.post('/login', userController.login);
-
-/**
- * @swagger
- * /user/refresh:
- *  get:
- *   summary: Refresh token
- *   tags: [User]
- *   parameters:
- *     - in: header
- *       name: Authorization
- *       type: string
- *       required: true
- *     - in: header
- *       name: Refresh
- *       type: string
- *       required: true
- *   responses:
- *    '200':
- *      description: Refresh token
- *      content:
- *        application/json:
- *         schema:
- *           type: object
- *           properties:
- *            id:
- *              type: integer
- *            accessToken:
- *              type: string
- *            refreshToken:
- *              type: string
- * */
-
-userRouter.get('/refresh', userController.refresh);
+userRouter.post('/', userController.addUser);
 
 /**
  * @swagger
@@ -169,18 +78,6 @@ userRouter.get('/refresh', userController.refresh);
  *             schema:
  *               $ref: '#/components/schemas/User'
  * */
-userRouter.get('/:id', async (req, res) => {
-  try {
-    const id = parseInt(req.params.id);
-    const user = await prisma.user.findUnique({
-      where: {
-        id,
-      },
-    });
-    res.status(200).json(user);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
-});
+userRouter.get('/:id', userController.getUser);
 
 module.exports = userRouter;

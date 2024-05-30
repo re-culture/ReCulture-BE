@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const user = require('./user');
+const auth = require('./auth');
 
 /**
  * @swagger
@@ -8,6 +9,14 @@ const user = require('./user');
  *  description: User management
  */
 router.use('/user', user);
+
+/**
+ * @swagger
+ * tags:
+ *  name: Auth
+ *  description: Auth management
+ */
+router.use('/auth', auth);
 
 /**
  * @swagger

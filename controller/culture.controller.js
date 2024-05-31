@@ -58,6 +58,20 @@ exports.getDetailCulture = async (req, res) => {
   }
 };
 
+exports.getMyCulture = async (req, res) => {
+  try {
+    const authorId = req.user.id;
+    const cultures = await prisma.culturePost.findMany({
+      where: {
+        authorId,
+      },
+    });
+    res.status(200).json(cultures);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 exports.postCulture = async (req, res) => {
   try {
     const {

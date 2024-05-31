@@ -2,6 +2,7 @@ const router = require('express').Router();
 const user = require('./user');
 const auth = require('./auth');
 const culture = require('./culture');
+const category = require('./category');
 
 /**
  * @swagger
@@ -26,6 +27,14 @@ router.use('/auth', auth);
  *  description: GET/POST Culture Post
  */
 router.use('/culture', culture);
+
+/**
+ * @swagger
+ * tags:
+ *  name: Category
+ *  description: GET Category Info
+ */
+router.use('/category', category);
 
 /**
  * @swagger

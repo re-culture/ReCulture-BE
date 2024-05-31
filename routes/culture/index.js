@@ -51,7 +51,9 @@ cultureRouter.get('/', cultureController.getAllPublicCultures);
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Culture'
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Culture'
  *  */
 cultureRouter.get('/user/:id', cultureController.getUserCulture);
 
@@ -78,9 +80,34 @@ cultureRouter.get('/user/:id', cultureController.getUserCulture);
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Culture'
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Culture'
  *  */
 cultureRouter.get('/category/:id', cultureController.getCategoryCulture);
+
+/**
+ * @swagger
+ * /culture/my-culture:
+ *   get:
+ *     summary: Get my all category cultures
+ *     tags: [Culture]
+ *     parameters:
+ *      - in: header
+ *        name: authorization
+ *        type: string
+ *        required: true
+ *     responses:
+ *       200:
+ *         description: Get all Category public cultures
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Culture'
+ *  */
+cultureRouter.get('/my-culture', cultureController.getMyCulture);
 
 /**
  * @swagger

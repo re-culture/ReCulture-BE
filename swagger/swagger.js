@@ -95,6 +95,35 @@ const options = {
             },
           },
         },
+        Category: {
+          type: 'object',
+          properties: {
+            id: {
+              type: 'integer',
+              example: 1,
+            },
+            category_name: {
+              type: 'string',
+              example: '스포츠 경기',
+            },
+            detail1_name: {
+              type: 'string',
+              example: '스포츠 종류',
+            },
+            detail2_name: {
+              type: 'string',
+              example: '상대팀 / 경기 장소',
+            },
+            detail3_name: {
+              type: 'string',
+              example: '경기 결과',
+            },
+            detail4_name: {
+              type: 'string',
+              example: '선발 라인업',
+            },
+          },
+        },
       },
     },
   },

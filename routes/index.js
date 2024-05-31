@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const user = require('./user');
 const auth = require('./auth');
+const culture = require('./culture');
 
 /**
  * @swagger
@@ -17,6 +18,14 @@ router.use('/user', user);
  *  description: Auth management
  */
 router.use('/auth', auth);
+
+/**
+ * @swagger
+ * tags:
+ *  name: Culture
+ *  description: GET/POST Culture Post
+ */
+router.use('/culture', culture);
 
 /**
  * @swagger

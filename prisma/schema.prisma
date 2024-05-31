@@ -13,14 +13,21 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum DisclosureType {
+  PUBLIC
+  FOLLOWER
+  PRIVATE
+}
+
 model User {
-  id        Int       @id @default(autoincrement())
-  email     String    @unique
+  id        Int           @id @default(autoincrement())
+  email     String        @unique
   password  String
   name      String?
   articles  Article[]
+  posts     CulturePost[]
   tokens    Token[]
-  createdAt DateTime  @default(now())
+  createdAt DateTime      @default(now())
 }
 
 model Token {
@@ -36,4 +43,31 @@ model Article {
   body     String?
   author   User    @relation(fields: [authorId], references: [id])
   authorId Int
+}
+
+model CulturePost {
+  id         Int            @id @default(autoincrement())
+  title      String
+  emoji      String
+  date       DateTime
+  category   CategoryDetail @relation(fields: [categoryId], references: [id])
+  categoryId Int
+  disclosure DisclosureType
+  review     String
+  detail1    String?
+  detail2    String?
+  detail3    String?
+  detail4    String?
+  author     User           @relation(fields: [authorId], references: [id])
+  authorId   Int
+}
+
+model CategoryDetail {
+  id            Int           @id @default(autoincrement())
+  category_name String
+  detail1_name  String
+  detail2_name  String
+  detail3_name  String
+  detail4_name  String?
+  CulturePost   CulturePost[]
 }

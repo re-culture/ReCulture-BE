@@ -1,5 +1,9 @@
 const cultureRouter = require('express').Router();
 const cultureController = require('../../controller/culture.controller');
+const authMiddleware = require('../../utils/auth.middleware');
+
+// Middleware
+cultureRouter.use(authMiddleware);
 
 /**
  * @swagger
@@ -7,6 +11,11 @@ const cultureController = require('../../controller/culture.controller');
  *   get:
  *     summary: Get all cultures
  *     tags: [Culture]
+ *     parameters:
+ *     - in: header
+ *       name: authorization
+ *       type: string
+ *       required: true
  *     responses:
  *       200:
  *         description: Get all public cultures
@@ -26,6 +35,10 @@ cultureRouter.get('/', cultureController.getAllPublicCultures);
  *     summary: Get User cultures
  *     tags: [Culture]
  *     parameters:
+ *      - in: header
+ *        name: authorization
+ *        type: string
+ *        required: true
  *      - in: path
  *        name: id
  *        schema:
@@ -49,6 +62,10 @@ cultureRouter.get('/user/:id', cultureController.getUserCulture);
  *     summary: Get all category cultures
  *     tags: [Culture]
  *     parameters:
+ *      - in: header
+ *        name: authorization
+ *        type: string
+ *        required: true
  *      - in: path
  *        name: id
  *        schema:
@@ -72,6 +89,10 @@ cultureRouter.get('/category/:id', cultureController.getCategoryCulture);
  *     summary: Get specific culture post
  *     tags: [Culture]
  *     parameters:
+ *      - in: header
+ *        name: authorization
+ *        type: string
+ *        required: true
  *      - in: path
  *        name: id
  *        schema:
@@ -88,6 +109,7 @@ cultureRouter.get('/category/:id', cultureController.getCategoryCulture);
  *  */
 cultureRouter.get('/:id', cultureController.getDetailCulture);
 
+cultureRouter.post('/', cultureController.postCulture);
 /**
  * 
  * /culture:

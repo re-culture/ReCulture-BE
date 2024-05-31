@@ -43,11 +43,11 @@ authRouter.post('/login', authController.login);
  *   tags: [Auth]
  *   parameters:
  *     - in: header
- *       name: Authorization
+ *       name: authorization
  *       type: string
  *       required: true
  *     - in: header
- *       name: Refresh
+ *       name: refresh
  *       type: string
  *       required: true
  *   responses:

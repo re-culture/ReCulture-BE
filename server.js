@@ -8,8 +8,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/api', api);
 
-app.get('/', (req, res) => {
-	res.send('Hello World');
-});
+// Swagger
+const { swaggerUi, specs } = require('./swagger/swagger');
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
 app.listen(port, () => console.log(`Server is running on port ${port}`));

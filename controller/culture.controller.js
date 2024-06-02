@@ -73,6 +73,9 @@ exports.getMyCulture = async (req, res) => {
 };
 
 exports.postCulture = async (req, res) => {
+  if (!req.files) {
+    return res.status(400).json({ error: 'Please upload a file' });
+  }
   try {
     const {
       title,
@@ -92,7 +95,7 @@ exports.postCulture = async (req, res) => {
         title,
         emoji,
         date,
-        categoryId,
+        categoryId: parseInt(categoryId),
         authorId,
         disclosure,
         review,
@@ -102,7 +105,17 @@ exports.postCulture = async (req, res) => {
         detail4,
       },
     });
-    res.status(200).json(culture);
+
+    const photoDocs = req.files.map((file) => ({
+      culturePostId: culture.id,
+      url: `/uploads/${req.user.id}/${file.filename}`,
+    }));
+
+    await prisma.photo.createMany({
+      data: photoDocs,
+    });
+
+    res.status(200).json({ culture, photoDocs });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }

@@ -60,6 +60,9 @@ model CulturePost {
   detail4    String?
   author     User           @relation(fields: [authorId], references: [id])
   authorId   Int
+  photos     Photo[]
+  createdAt  DateTime       @default(now())
+  updatedAt  DateTime       @updatedAt
 }
 
 model CategoryDetail {
@@ -70,4 +73,11 @@ model CategoryDetail {
   detail3_name  String
   detail4_name  String?
   CulturePost   CulturePost[]
+}
+
+model Photo {
+  id            Int         @id @default(autoincrement())
+  url           String
+  culturePost   CulturePost @relation(fields: [culturePostId], references: [id])
+  culturePostId Int
 }

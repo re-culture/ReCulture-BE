@@ -1,6 +1,7 @@
 const cultureRouter = require('express').Router();
 const cultureController = require('../../controller/culture.controller');
 const authMiddleware = require('../../utils/auth.middleware');
+const photoUploader = require('../../lib/photo_uploader');
 
 // Middleware
 cultureRouter.use(authMiddleware);
@@ -136,7 +137,11 @@ cultureRouter.get('/my-culture', cultureController.getMyCulture);
  *  */
 cultureRouter.get('/:id', cultureController.getDetailCulture);
 
-cultureRouter.post('/', cultureController.postCulture);
+cultureRouter.post(
+  '/',
+  photoUploader.array('photos', 5),
+  cultureController.postCulture
+);
 /**
  * 
  * /culture:
@@ -176,26 +181,5 @@ cultureRouter.post('/', cultureController.postCulture);
  *                 type: string
  *
 cultureRouter.post('/', cultureController.addUser);
-
-/**
- * 
- * /culture/{id}:
- *   get:
- *     summary: Get User By Id
- *     tags: [User]
- *     parameters:
- *       - in: path
- *         name: id
- *         id: integer
- *         required: true
- *     responses:
- *       '200':
- *         description: Search User By Id
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/User'
- * 
-cultureRouter.get('/:id', cultureController.getUser);
 */
 module.exports = cultureRouter;

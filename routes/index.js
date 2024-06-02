@@ -4,6 +4,7 @@ const auth = require('./auth');
 const culture = require('./culture');
 const category = require('./category');
 const follow = require('./follow');
+const profile = require('./profile');
 
 /**
  * @swagger
@@ -44,6 +45,14 @@ router.use('/category', category);
  *  description: Follow Request
  */
 router.use('/follow', follow);
+
+/**
+ * @swagger
+ * tags:
+ *  name: Profile
+ *  description: Profile Management
+ */
+router.use('/profile', profile);
 
 /**
  * @swagger

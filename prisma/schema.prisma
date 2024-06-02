@@ -30,7 +30,7 @@ model User {
   email                  String          @unique
   password               String
   name                   String?
-  articles               Article[]
+  profile                Profile?
   posts                  CulturePost[]
   tokens                 Token[]
   createdAt              DateTime        @default(now())
@@ -45,14 +45,6 @@ model Token {
   token  String
   userId Int
   user   User   @relation(fields: [userId], references: [id])
-}
-
-model Article {
-  id       Int     @id @default(autoincrement())
-  title    String
-  body     String?
-  author   User    @relation(fields: [authorId], references: [id])
-  authorId Int
 }
 
 model CulturePost {
@@ -116,4 +108,15 @@ model Follow {
   following User @relation("Follower", fields: [followingId], references: [id])
 
   @@unique([followerId, followingId])
+}
+
+model Profile {
+  id           Int       @id @default(autoincrement())
+  userId       Int       @unique
+  user         User      @relation(fields: [userId], references: [id])
+  nickname     String
+  bio          String?
+  birthdate    DateTime?
+  interest     String?
+  profilePhoto String
 }

@@ -1,6 +1,7 @@
 const swaggerUi = require('swagger-ui-express');
 const swaggerJsdoc = require('swagger-jsdoc');
 const { DisclosureType } = require('@prisma/client');
+const { profile } = require('../lib/prisma');
 
 const options = {
   swaggerDefinition: {
@@ -150,6 +151,39 @@ const options = {
             updatedAt: {
               type: 'DateTime',
               example: '2024-05-24T03:41:10.125Z',
+            },
+          },
+        },
+        Profile: {
+          type: 'object',
+          properties: {
+            id: {
+              type: 'integer',
+              example: 1,
+            },
+            userId: {
+              type: 'integer',
+              example: 1,
+            },
+            nickname: {
+              type: 'string',
+              example: '2093ab',
+            },
+            bio: {
+              type: 'String',
+              example: '안녕하세요',
+            },
+            birthdate: {
+              type: 'DateTime',
+              example: '2024-05-24T03:41:10.125Z',
+            },
+            interest: {
+              type: 'String',
+              example: 'Sports',
+            },
+            profilePhoto: {
+              type: 'String',
+              example: 'uploads/profile/default.jpg',
             },
           },
         },

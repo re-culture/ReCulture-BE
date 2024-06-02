@@ -124,6 +124,35 @@ const options = {
             },
           },
         },
+        FollowRequest: {
+          type: 'object',
+          properties: {
+            id: {
+              type: 'integer',
+              example: 1,
+            },
+            fromUserId: {
+              type: 'integer',
+              example: 1,
+            },
+            toUserId: {
+              type: 'integer',
+              example: 2,
+            },
+            status: {
+              type: 'FollowRequestStatus',
+              example: 'ACCEPTED',
+            },
+            createdAt: {
+              type: 'DateTime',
+              example: '2024-05-24T03:41:10.125Z',
+            },
+            updatedAt: {
+              type: 'DateTime',
+              example: '2024-05-24T03:41:10.125Z',
+            },
+          },
+        },
       },
     },
   },

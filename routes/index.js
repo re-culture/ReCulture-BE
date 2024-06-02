@@ -3,6 +3,7 @@ const user = require('./user');
 const auth = require('./auth');
 const culture = require('./culture');
 const category = require('./category');
+const follow = require('./follow');
 
 /**
  * @swagger
@@ -35,6 +36,14 @@ router.use('/culture', culture);
  *  description: GET Category Info
  */
 router.use('/category', category);
+
+/**
+ * @swagger
+ * tags:
+ *  name: Follow
+ *  description: Follow Request
+ */
+router.use('/follow', follow);
 
 /**
  * @swagger

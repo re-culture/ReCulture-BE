@@ -19,15 +19,25 @@ enum DisclosureType {
   PRIVATE
 }
 
+enum FollowRequestStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
 model User {
-  id        Int           @id @default(autoincrement())
-  email     String        @unique
-  password  String
-  name      String?
-  articles  Article[]
-  posts     CulturePost[]
-  tokens    Token[]
-  createdAt DateTime      @default(now())
+  id                     Int             @id @default(autoincrement())
+  email                  String          @unique
+  password               String
+  name                   String?
+  articles               Article[]
+  posts                  CulturePost[]
+  tokens                 Token[]
+  createdAt              DateTime        @default(now())
+  sentFollowRequests     FollowRequest[] @relation("FollowRequestSender")
+  receivedFollowRequests FollowRequest[] @relation("FollowRequestReceiver")
+  followers              Follow[]        @relation("Following")
+  following              Follow[]        @relation("Follower")
 }
 
 model Token {
@@ -80,4 +90,30 @@ model Photo {
   url           String
   culturePost   CulturePost @relation(fields: [culturePostId], references: [id])
   culturePostId Int
+}
+
+model FollowRequest {
+  id         Int                 @id @default(autoincrement())
+  fromUserId Int
+  toUserId   Int
+  status     FollowRequestStatus @default(PENDING)
+  createdAt  DateTime            @default(now())
+  updatedAt  DateTime            @updatedAt
+
+  sender   User @relation("FollowRequestSender", fields: [fromUserId], references: [id])
+  receiver User @relation("FollowRequestReceiver", fields: [toUserId], references: [id])
+
+  @@unique([fromUserId, toUserId])
+}
+
+model Follow {
+  id          Int      @id @default(autoincrement())
+  followerId  Int
+  followingId Int
+  createdAt   DateTime @default(now())
+
+  follower  User @relation("Following", fields: [followerId], references: [id])
+  following User @relation("Follower", fields: [followingId], references: [id])
+
+  @@unique([followerId, followingId])
 }

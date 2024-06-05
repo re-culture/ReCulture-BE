@@ -41,11 +41,9 @@ authRouter.post('/login', authController.login);
  *  get:
  *   summary: Refresh token
  *   tags: [Auth]
+ *   security:
+ *    - bearerAuth: []
  *   parameters:
- *     - in: header
- *       name: authorization
- *       type: string
- *       required: true
  *     - in: header
  *       name: refresh
  *       type: string

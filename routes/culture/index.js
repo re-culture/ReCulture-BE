@@ -12,11 +12,8 @@ cultureRouter.use(authMiddleware);
  *   get:
  *     summary: Get all cultures
  *     tags: [Culture]
- *     parameters:
- *     - in: header
- *       name: authorization
- *       type: string
- *       required: true
+ *     security:
+ *      - bearerAuth: []
  *     responses:
  *       200:
  *         description: Get all public cultures
@@ -35,11 +32,9 @@ cultureRouter.get('/', cultureController.getAllPublicCultures);
  *   get:
  *     summary: Get User cultures
  *     tags: [Culture]
+ *     security:
+ *      - bearerAuth: []
  *     parameters:
- *      - in: header
- *        name: authorization
- *        type: string
- *        required: true
  *      - in: path
  *        name: id
  *        schema:
@@ -64,11 +59,9 @@ cultureRouter.get('/user/:id', cultureController.getUserCulture);
  *   get:
  *     summary: Get all category cultures
  *     tags: [Culture]
+ *     security:
+ *      - bearerAuth: []
  *     parameters:
- *      - in: header
- *        name: authorization
- *        type: string
- *        required: true
  *      - in: path
  *        name: id
  *        schema:
@@ -93,11 +86,8 @@ cultureRouter.get('/category/:id', cultureController.getCategoryCulture);
  *   get:
  *     summary: Get my all category cultures
  *     tags: [Culture]
- *     parameters:
- *      - in: header
- *        name: authorization
- *        type: string
- *        required: true
+ *     security:
+ *      - bearerAuth: []
  *     responses:
  *       200:
  *         description: Get all Category public cultures
@@ -116,11 +106,9 @@ cultureRouter.get('/my-culture', cultureController.getMyCulture);
  *   get:
  *     summary: Get specific culture post
  *     tags: [Culture]
+ *     security:
+ *      - bearerAuth: []
  *     parameters:
- *      - in: header
- *        name: authorization
- *        type: string
- *        required: true
  *      - in: path
  *        name: id
  *        schema:
@@ -137,12 +125,15 @@ cultureRouter.get('/my-culture', cultureController.getMyCulture);
  *  */
 cultureRouter.get('/:id', cultureController.getDetailCulture);
 
+//TODO: Add swagger documentation(photos)
 /**
  * @swagger
  * /culture:
  *   post:
  *     summary: Create a culture
  *     tags: [Culture]
+ *     security:
+ *      - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:

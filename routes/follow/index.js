@@ -11,11 +11,8 @@ followRouter.use(authMiddleware);
  *   get:
  *     summary: Get all users follow request
  *     tags: [Follow]
- *     parameters:
- *     - in: header
- *       name: authorization
- *       type: string
- *       required: true
+ *     security:
+ *      - bearerAuth: []
  *     responses:
  *       200:
  *         description: Get all users follow request
@@ -34,11 +31,9 @@ followRouter.get('/', followController.getMyFollowRequest);
  *   post:
  *     summary: Create Follow Request
  *     tags: [Follow]
+ *     security:
+ *      - bearerAuth: []
  *     parameters:
- *      - in: header
- *        name: authorization
- *        type: string
- *        required: true
  *      - in: body
  *        name: Follow Request
  *        type: object
@@ -64,11 +59,9 @@ followRouter.post('/request', followController.sendFollowRequest);
  *   post:
  *     summary: Accept Follow Request
  *     tags: [Follow]
+ *     security:
+ *      - bearerAuth: []
  *     parameters:
- *      - in: header
- *        name: authorization
- *        type: string
- *        required: true
  *      - in: path
  *        name: requestId
  *        schema:
@@ -91,11 +84,9 @@ followRouter.post('/accept/:id', followController.acceptFollowRequest);
  *   post:
  *     summary: Reject Follow Request
  *     tags: [Follow]
+ *     security:
+ *      - bearerAuth: []
  *     parameters:
- *      - in: header
- *        name: authorization
- *        type: string
- *        required: true
  *      - in: path
  *        name: requestId
  *        schema:

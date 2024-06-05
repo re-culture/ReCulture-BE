@@ -12,11 +12,8 @@ profileRouter.use(authMiddleware);
  *   get:
  *     summary: Get all profiles
  *     tags: [Profile]
- *     parameters:
- *     - in: header
- *       name: authorization
- *       type: string
- *       required: true
+ *     security:
+ *      - bearerAuth: []
  *     responses:
  *       200:
  *         description: Get all profiles
@@ -35,11 +32,9 @@ profileRouter.get('/', profileController.getAllProfile);
  *   post:
  *     summary: Create User profile
  *     tags: [Profile]
+ *     security:
+ *      - bearerAuth: []
  *     parameters:
- *     - in: header
- *       name: authorization
- *       type: string
- *       required: true
  *     - in: formData
  *       name: photo
  *       type: file
@@ -79,11 +74,9 @@ profileRouter.post(
  *   put:
  *     summary: Modify User Profile
  *     tags: [Profile]
+ *     security:
+ *      - bearerAuth: []
  *     parameters:
- *     - in: header
- *       name: authorization
- *       type: string
- *       required: true
  *     - in: formData
  *       name: photo
  *       type: file
@@ -123,11 +116,8 @@ profileRouter.put(
  *   get:
  *     summary: Get User Profile
  *     tags: [Profile]
- *     parameters:
- *      - in: header
- *        name: authorization
- *        type: string
- *        required: true
+ *     security:
+ *      - bearerAuth: []
  *     responses:
  *       200:
  *         description: Get User Profile
@@ -144,11 +134,8 @@ profileRouter.get('/my-profile', profileController.getProfile);
  *   put:
  *     summary: Add Culture Exp Point
  *     tags: [Profile]
- *     parameters:
- *      - in: header
- *        name: authorization
- *        type: string
- *        required: true
+ *     security:
+ *      - bearerAuth: []
  *     responses:
  *       200:
  *         description: Add Culture Exp Point
@@ -165,11 +152,8 @@ profileRouter.put('/add-cul-exp', profileController.addCultureExp);
  *   put:
  *     summary: Add Ticket Exp Point
  *     tags: [Profile]
- *     parameters:
- *      - in: header
- *        name: authorization
- *        type: string
- *        required: true
+ *     security:
+ *      - bearerAuth: []
  *     responses:
  *       200:
  *         description: Add Ticket Exp Point
@@ -186,11 +170,9 @@ profileRouter.put('/add-tick-exp', profileController.addTicketExp);
  *   get:
  *     summary: Get specific profile
  *     tags: [Profile]
+ *     security:
+ *      - bearerAuth: []
  *     parameters:
- *      - in: header
- *        name: authorization
- *        type: string
- *        required: true
  *      - in: path
  *        name: id
  *        schema:

@@ -11,11 +11,8 @@ categoryRouter.use(authMiddleware);
  *   get:
  *     summary: Get all categories
  *     tags: [Category]
- *     parameters:
- *     - in: header
- *       name: authorization
- *       type: string
- *       required: true
+ *     security:
+ *      - bearerAuth: []
  *     responses:
  *       200:
  *         description: Get all Categories
@@ -34,11 +31,9 @@ categoryRouter.get('/', categoryController.getCategories);
  *   get:
  *     summary: Get User categorys
  *     tags: [Category]
+ *     security:
+ *      - bearerAuth: []
  *     parameters:
- *      - in: header
- *        name: authorization
- *        type: string
- *        required: true
  *      - in: path
  *        name: id
  *        schema:

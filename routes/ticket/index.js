@@ -12,11 +12,8 @@ ticketRouter.use(authMiddleware);
  *   get:
  *     summary: Get all tickets
  *     tags: [Ticket]
- *     parameters:
- *     - in: header
- *       name: authorization
- *       type: string
- *       required: true
+ *     security:
+ *      - bearerAuth: []
  *     responses:
  *       200:
  *         description: Get all public tickets
@@ -35,11 +32,9 @@ ticketRouter.get('/', ticketController.getAllPublicTickets);
  *   get:
  *     summary: Get User tickets
  *     tags: [Ticket]
+ *     security:
+ *      - bearerAuth: []
  *     parameters:
- *      - in: header
- *        name: authorization
- *        type: string
- *        required: true
  *      - in: path
  *        name: id
  *        schema:
@@ -64,11 +59,9 @@ ticketRouter.get('/user/:id', ticketController.getUserTicket);
  *   get:
  *     summary: Get all category tickets
  *     tags: [Ticket]
+ *     security:
+ *      - bearerAuth: []
  *     parameters:
- *      - in: header
- *        name: authorization
- *        type: string
- *        required: true
  *      - in: path
  *        name: id
  *        schema:
@@ -93,11 +86,8 @@ ticketRouter.get('/category/:id', ticketController.getCategoryTicket);
  *   get:
  *     summary: Get my all category tickets
  *     tags: [Ticket]
- *     parameters:
- *      - in: header
- *        name: authorization
- *        type: string
- *        required: true
+ *     security:
+ *      - bearerAuth: []
  *     responses:
  *       200:
  *         description: Get all Category public tickets
@@ -116,11 +106,9 @@ ticketRouter.get('/my-ticket', ticketController.getMyTicket);
  *   get:
  *     summary: Get specific ticket post
  *     tags: [Ticket]
+ *     security:
+ *      - bearerAuth: []
  *     parameters:
- *      - in: header
- *        name: authorization
- *        type: string
- *        required: true
  *      - in: path
  *        name: id
  *        schema:

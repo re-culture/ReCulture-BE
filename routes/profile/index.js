@@ -8,32 +8,6 @@ profileRouter.use(authMiddleware);
 
 /**
  * @swagger
- * /profile/{id}:
- *   get:
- *     summary: Get specific profile post
- *     tags: [Profile]
- *     parameters:
- *      - in: header
- *        name: authorization
- *        type: string
- *        required: true
- *      - in: path
- *        name: id
- *        schema:
- *        type: integer
- *        required: true
- *        description: Culture Post Id
- *     responses:
- *       200:
- *         description: Get Specific profile post
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Culture'
- *  */
-
-/**
- * @swagger
  * /profile:
  *   get:
  *     summary: Get all profiles
@@ -55,12 +29,88 @@ profileRouter.use(authMiddleware);
  *  */
 profileRouter.get('/', profileController.getAllProfile);
 
+/**
+ * @swagger
+ * /profile:
+ *   post:
+ *     summary: Create User profile
+ *     tags: [Profile]
+ *     parameters:
+ *     - in: header
+ *       name: authorization
+ *       type: string
+ *       required: true
+ *     - in: formData
+ *       name: photo
+ *       type: file
+ *       required: true
+ *     requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *         schema:
+ *           type: object
+ *           properties:
+ *            nickname:
+ *             type: string
+ *            bio:
+ *             type: string
+ *            birthdate:
+ *             type: string
+ *            interests:
+ *             type: string
+ *     responses:
+ *       200:
+ *         description: Create User Profile
+ *         content:
+ *           application/json:
+ *             schema:
+ *              $ref: '#/components/schemas/Profile'
+ *  */
 profileRouter.post(
   '/',
   photoUploader.single('photo'),
   profileController.createProfile
 );
 
+/**
+ * @swagger
+ * /profile:
+ *   put:
+ *     summary: Modify User Profile
+ *     tags: [Profile]
+ *     parameters:
+ *     - in: header
+ *       name: authorization
+ *       type: string
+ *       required: true
+ *     - in: formData
+ *       name: photo
+ *       type: file
+ *       required: true
+ *     requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *         schema:
+ *           type: object
+ *           properties:
+ *            nickname:
+ *             type: string
+ *            bio:
+ *             type: string
+ *            birthdate:
+ *             type: string
+ *            interests:
+ *             type: string
+ *     responses:
+ *       200:
+ *         description: Modify User Profile
+ *         content:
+ *           application/json:
+ *             schema:
+ *              $ref: '#/components/schemas/Profile'
+ *  */
 profileRouter.put(
   '/',
   photoUploader.single('photo'),
@@ -90,9 +140,51 @@ profileRouter.get('/my-profile', profileController.getProfile);
 
 /**
  * @swagger
- * /profile/my-profile:
+ * /profile/add-cul-exp:
+ *   put:
+ *     summary: Add Culture Exp Point
+ *     tags: [Profile]
+ *     parameters:
+ *      - in: header
+ *        name: authorization
+ *        type: string
+ *        required: true
+ *     responses:
+ *       200:
+ *         description: Add Culture Exp Point
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Profile'
+ *  */
+profileRouter.put('/add-cul-exp', profileController.addCultureExp);
+
+/**
+ * @swagger
+ * /profile/add-tick-exp:
+ *   put:
+ *     summary: Add Ticket Exp Point
+ *     tags: [Profile]
+ *     parameters:
+ *      - in: header
+ *        name: authorization
+ *        type: string
+ *        required: true
+ *     responses:
+ *       200:
+ *         description: Add Ticket Exp Point
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Profile'
+ *  */
+profileRouter.put('/add-tick-exp', profileController.addTicketExp);
+
+/**
+ * @swagger
+ * /profile/{id}:
  *   get:
- *     summary: Get User Profile
+ *     summary: Get specific profile
  *     tags: [Profile]
  *     parameters:
  *      - in: header
@@ -100,18 +192,18 @@ profileRouter.get('/my-profile', profileController.getProfile);
  *        type: string
  *        required: true
  *      - in: path
- *        name: userId
+ *        name: id
  *        schema:
- *          type: integer
+ *        type: integer
  *        required: true
- *        description: User Id
+ *        description: Profile Id
  *     responses:
  *       200:
- *         description: Get User Profile
+ *         description: Get Specific profile
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Profile'
+ *               $ref: '#/components/schemas/Culture'
  *  */
 profileRouter.get('/:id', profileController.getSpeceficProfile);
 

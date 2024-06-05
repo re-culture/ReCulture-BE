@@ -25,6 +25,13 @@ enum FollowRequestStatus {
   REJECTED
 }
 
+enum LevelName {
+  Freshman
+  Sophomore
+  Junior
+  Senior
+}
+
 model User {
   id                     Int             @id @default(autoincrement())
   email                  String          @unique
@@ -120,6 +127,9 @@ model Profile {
   birthdate    DateTime?
   interest     String?
   profilePhoto String
+  exp          Int       @default(0)
+  levelId      Int       @default(1)
+  level        LevelName @default(Freshman)
 }
 
 model TicketPost {

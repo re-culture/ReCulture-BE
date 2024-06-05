@@ -7,6 +7,7 @@ exports.getAllPublicCultures = async (req, res) => {
       where: {
         disclosure: DisclosureType.PUBLIC,
       },
+      include: { photos: true },
     });
     res.status(200).json(cultures);
   } catch (error) {
@@ -22,6 +23,7 @@ exports.getUserCulture = async (req, res) => {
         authorId: id,
         disclosure: DisclosureType.PUBLIC,
       },
+      include: { photos: true },
     });
     res.status(200).json(cultures);
   } catch (error) {
@@ -37,6 +39,7 @@ exports.getCategoryCulture = async (req, res) => {
         categoryId: id,
         disclosure: DisclosureType.PUBLIC,
       },
+      include: { photos: true },
     });
     res.status(200).json(cultures);
   } catch (error) {
@@ -51,6 +54,7 @@ exports.getDetailCulture = async (req, res) => {
       where: {
         id,
       },
+      include: { photos: true },
     });
     res.status(200).json(culture);
   } catch (error) {
@@ -65,6 +69,7 @@ exports.getMyCulture = async (req, res) => {
       where: {
         authorId,
       },
+      include: { photos: true },
     });
     res.status(200).json(cultures);
   } catch (error) {
@@ -120,35 +125,3 @@ exports.postCulture = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
-
-/*
-exports.getUser = async (req, res) => {
-  try {
-    const id = parseInt(req.params.id);
-    const user = await prisma.user.findUnique({
-      where: {
-        id,
-      },
-    });
-    res.status(200).json(user);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
-};
-
-exports.addUser = async (req, res) => {
-  try {
-    const { name, email, password } = req.body;
-    const user = await prisma.user.create({
-      data: {
-        name,
-        email,
-        password,
-      },
-    });
-    res.status(200).json(user);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
-};
-*/

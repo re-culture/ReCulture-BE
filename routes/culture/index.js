@@ -137,30 +137,18 @@ cultureRouter.get('/my-culture', cultureController.getMyCulture);
  *  */
 cultureRouter.get('/:id', cultureController.getDetailCulture);
 
-cultureRouter.post(
-  '/',
-  photoUploader.array('photos', 5),
-  cultureController.postCulture
-);
 /**
- * 
+ * @swagger
  * /culture:
  *   post:
  *     summary: Create a culture
- *     tags: [User]
+ *     tags: [Culture]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             properties:
- *               name:
- *                 type: string
- *               email:
- *                 type: string
- *               password:
- *                 type: string
+ *             $ref: '#/components/schemas/Culture'
  *     responses:
  *       '200':
  *         description: Create a culture
@@ -168,18 +156,24 @@ cultureRouter.post(
  *           application/json:
  *             schema:
  *               type: object
- *             properties:
- *               id:
- *                 type: integer
- *               name:
- *                 type: string
- *               email:
- *                 type: string
- *               password:
- *                 type: string
- *               createdAt:
- *                 type: string
- *
-cultureRouter.post('/', cultureController.addUser);
-*/
+ *               properties:
+ *                culture:
+ *                 type: object
+ *                 $ref: '#/components/schemas/Culture'
+ *                photoDocs:
+ *                  type: array
+ *                  items:
+ *                   type: object
+ *                   properties:
+ *                     culturePostId:
+ *                      type: integer
+ *                     url:
+ *                      type: string
+ */
+cultureRouter.post(
+  '/',
+  photoUploader.array('photos', 5),
+  cultureController.postCulture
+);
+
 module.exports = cultureRouter;

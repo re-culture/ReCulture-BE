@@ -11,7 +11,7 @@ profileRouter.use(authMiddleware);
  * /profile/{id}:
  *   get:
  *     summary: Get specific profile post
- *     tags: [Culture]
+ *     tags: [Profile]
  *     parameters:
  *      - in: header
  *        name: authorization

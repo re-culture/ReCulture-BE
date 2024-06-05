@@ -187,6 +187,39 @@ const options = {
             },
           },
         },
+        Ticket: {
+          type: 'object',
+          properties: {
+            id: {
+              type: 'integer',
+              example: 1,
+            },
+            title: {
+              type: 'string',
+              example: '아이유 콘서트',
+            },
+            emoji: {
+              type: 'string',
+              example: '😻',
+            },
+            date: {
+              type: 'DateTime',
+              example: '2024-05-24T03:41:10.125Z',
+            },
+            authorId: {
+              type: 'integer',
+              example: 1,
+            },
+            disclosure: {
+              type: 'DisclosureType',
+              example: 'PUBLIC',
+            },
+            review: {
+              type: 'string',
+              example: '좋아요',
+            },
+          },
+        },
       },
     },
   },

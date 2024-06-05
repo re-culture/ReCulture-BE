@@ -32,6 +32,7 @@ model User {
   name                   String?
   profile                Profile?
   posts                  CulturePost[]
+  ticketPosts            TicketPost[]
   tokens                 Token[]
   createdAt              DateTime        @default(now())
   sentFollowRequests     FollowRequest[] @relation("FollowRequestSender")
@@ -119,4 +120,25 @@ model Profile {
   birthdate    DateTime?
   interest     String?
   profilePhoto String
+}
+
+model TicketPost {
+  id         Int            @id @default(autoincrement())
+  title      String
+  emoji      String
+  date       DateTime
+  disclosure DisclosureType
+  review     String
+  author     User           @relation(fields: [authorId], references: [id])
+  authorId   Int
+  photos     TicketPhoto[]
+  createdAt  DateTime       @default(now())
+  updatedAt  DateTime       @updatedAt
+}
+
+model TicketPhoto {
+  id           Int        @id @default(autoincrement())
+  url          String
+  ticketPost   TicketPost @relation(fields: [ticketPostId], references: [id])
+  ticketPostId Int
 }

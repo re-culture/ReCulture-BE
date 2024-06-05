@@ -25,10 +25,6 @@ const options = {
               type: 'integer',
               example: 1,
             },
-            name: {
-              type: 'string',
-              example: 'John Doe',
-            },
             email: {
               type: 'string',
               example: 'john@gmail.com',

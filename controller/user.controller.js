@@ -1,10 +1,12 @@
 const prisma = require('../lib/prisma');
 const bcrypt = require('bcryptjs');
+const { exclude } = require('../utils/excludeField');
 
 exports.getAllUsers = async (req, res) => {
   try {
     const users = await prisma.user.findMany();
-    res.status(200).json(users);
+    const filteredUsers = users.map((user) => exclude(user, ['password']));
+    res.status(200).json(filteredUsers);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -18,7 +20,8 @@ exports.getUser = async (req, res) => {
         id,
       },
     });
-    res.status(200).json(user);
+    const filteredUser = exclude(user, ['password']);
+    res.status(200).json(filteredUser);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -26,16 +29,16 @@ exports.getUser = async (req, res) => {
 
 exports.addUser = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { email, password } = req.body;
     const encodedPW = bcrypt.hashSync(password, 10);
     const user = await prisma.user.create({
       data: {
-        name,
         email,
         password: encodedPW,
       },
     });
-    res.status(200).json(user);
+    const filteredUser = exclude(user, ['password']);
+    res.status(200).json(filteredUser);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }

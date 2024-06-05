@@ -32,8 +32,6 @@ userRouter.get('/', userController.getAllUsers);
  *           schema:
  *             type: object
  *             properties:
- *               name:
- *                 type: string
  *               email:
  *                 type: string
  *               password:

@@ -33,16 +33,17 @@ followRouter.get('/', followController.getMyFollowRequest);
  *     tags: [Follow]
  *     security:
  *      - bearerAuth: []
- *     parameters:
- *      - in: body
- *        name: Follow Request
- *        type: object
- *        required: true
- *        properties:
- *          receiverId:
- *            type: integer
- *            required: true
- *            description: Receiver User Id
+ *     requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            type: object
+ *            properties:
+ *              receiverId:
+ *                type: integer
+ *                required: true
+ *                description: Receiver User Id
  *     responses:
  *       200:
  *         description: Get all Users public follows
@@ -63,7 +64,7 @@ followRouter.post('/request', followController.sendFollowRequest);
  *      - bearerAuth: []
  *     parameters:
  *      - in: path
- *        name: requestId
+ *        name: id
  *        schema:
  *        type: integer
  *        required: true
@@ -88,7 +89,7 @@ followRouter.post('/accept/:id', followController.acceptFollowRequest);
  *      - bearerAuth: []
  *     parameters:
  *      - in: path
- *        name: requestId
+ *        name: id
  *        schema:
  *        type: integer
  *        required: true
@@ -103,8 +104,44 @@ followRouter.post('/accept/:id', followController.acceptFollowRequest);
  *  */
 followRouter.post('/reject/:id', followController.rejectFollowRequest);
 
+/**
+ * @swagger
+ * /follow/followers:
+ *   get:
+ *     summary: Get all users followers
+ *     tags: [Follow]
+ *     security:
+ *      - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Get all users followers
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                $ref: '#/components/schemas/Follower'
+ *  */
 followRouter.get('/followers', followController.getMyFollowers);
 
+/**
+ * @swagger
+ * /follow/followings:
+ *   get:
+ *     summary: Get all users followers
+ *     tags: [Follow]
+ *     security:
+ *      - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Get all users followings
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                $ref: '#/components/schemas/Following'
+ *  */
 followRouter.get('/followings', followController.getMyFollwings);
 
 module.exports = followRouter;

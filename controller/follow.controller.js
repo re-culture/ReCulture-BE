@@ -1,15 +1,15 @@
 const prisma = require('../lib/prisma');
 const { FollowRequestStatus } = require('@prisma/client');
+const { exclude } = require('../utils/excludeField');
 
 exports.sendFollowRequest = async (req, res) => {
   try {
     const senderId = req.user.id;
     const { receiverId } = req.body;
-
     const followRequest = await prisma.followRequest.create({
       data: {
         fromUserId: senderId,
-        toUserId: receiverId,
+        toUserId: parseInt(receiverId),
       },
     });
     res.status(200).json(followRequest);
@@ -107,7 +107,11 @@ exports.getMyFollowers = async (req, res) => {
         follower: true,
       },
     });
-    res.status(200).json(followers);
+    const filteredFollowers = followers.map((follower) => {
+      const followerWithoutPassword = exclude(follower.follower, ['password']);
+      return { ...follower, follower: followerWithoutPassword };
+    });
+    res.status(200).json(filteredFollowers);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -124,7 +128,13 @@ exports.getMyFollwings = async (req, res) => {
         following: true,
       },
     });
-    res.status(200).json(followings);
+    const filteredFollowings = followings.map((following) => {
+      const followingWithoutPassword = exclude(following.following, [
+        'password',
+      ]);
+      return { ...following, following: followingWithoutPassword };
+    });
+    res.status(200).json(filteredFollowings);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }

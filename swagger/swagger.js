@@ -223,6 +223,82 @@ const options = {
             },
           },
         },
+        Follower: {
+          type: 'object',
+          properties: {
+            id: {
+              type: 'integer',
+              example: 1,
+            },
+            followerId: {
+              type: 'integer',
+              example: 1,
+            },
+            followingId: {
+              type: 'integer',
+              example: 2,
+            },
+            createdAt: {
+              type: 'DateTime',
+              example: '2024-05-24T03:41:10.125Z',
+            },
+            follower: {
+              type: 'object',
+              properties: {
+                id: {
+                  type: 'integer',
+                  example: '1',
+                },
+                email: {
+                  type: 'string',
+                  example: 'test@test.com',
+                },
+                createdAt: {
+                  type: 'DateTime',
+                  example: '2024-05-24T03:41:10.125Z',
+                },
+              },
+            },
+          },
+        },
+        Following: {
+          type: 'object',
+          properties: {
+            id: {
+              type: 'integer',
+              example: 1,
+            },
+            followerId: {
+              type: 'integer',
+              example: 1,
+            },
+            followingId: {
+              type: 'integer',
+              example: 2,
+            },
+            createdAt: {
+              type: 'DateTime',
+              example: '2024-05-24T03:41:10.125Z',
+            },
+            following: {
+              type: 'object',
+              properties: {
+                id: {
+                  type: 'integer',
+                  example: '1',
+                },
+                email: {
+                  type: 'string',
+                  example: 'test@test.com',
+                },
+                createdAt: {
+                  type: 'DateTime',
+                  example: '2024-05-24T03:41:10.125Z',
+                },
+              },
+            },
+          },
+        },
       },
     },
     security: [

@@ -137,9 +137,36 @@ cultureRouter.get('/:id', cultureController.getDetailCulture);
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
- *             $ref: '#/components/schemas/Culture'
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *               emoji:
+ *                 type: string
+ *               date:
+ *                 type: string
+ *                 format: date-time
+ *               categoryId:
+ *                 type: string
+ *               disclosure:
+ *                 type: string
+ *               review:
+ *                 type: string
+ *               detail1:
+ *                 type: string
+ *               detail2:
+ *                 type: string
+ *               detail3:
+ *                 type: string
+ *               detail4:
+ *                 type: string
+ *               photos:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                   format: binary
  *     responses:
  *       '200':
  *         description: Create a culture

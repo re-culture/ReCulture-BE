@@ -34,15 +34,10 @@ profileRouter.get('/', profileController.getAllProfile);
  *     tags: [Profile]
  *     security:
  *      - bearerAuth: []
- *     parameters:
- *     - in: formData
- *       name: photo
- *       type: file
- *       required: true
  *     requestBody:
  *      required: true
  *      content:
- *        application/json:
+ *        multipart/form-data:
  *         schema:
  *           type: object
  *           properties:
@@ -52,8 +47,12 @@ profileRouter.get('/', profileController.getAllProfile);
  *             type: string
  *            birthdate:
  *             type: string
+ *             format: date-time
  *            interests:
  *             type: string
+ *            photo:
+ *             type: string
+ *             format: binary
  *     responses:
  *       200:
  *         description: Create User Profile
@@ -76,15 +75,10 @@ profileRouter.post(
  *     tags: [Profile]
  *     security:
  *      - bearerAuth: []
- *     parameters:
- *     - in: formData
- *       name: photo
- *       type: file
- *       required: true
  *     requestBody:
  *      required: true
  *      content:
- *        application/json:
+ *        multipart/form-data:
  *         schema:
  *           type: object
  *           properties:
@@ -94,8 +88,12 @@ profileRouter.post(
  *             type: string
  *            birthdate:
  *             type: string
+ *             format: date-time
  *            interests:
  *             type: string
+ *            photo:
+ *             type: string
+ *             format: binary
  *     responses:
  *       200:
  *         description: Modify User Profile

@@ -28,6 +28,31 @@ cultureRouter.get('/', cultureController.getAllPublicCultures);
 
 /**
  * @swagger
+ * /culture/search:
+ *   get:
+ *     summary: Search cultures
+ *     tags: [Culture]
+ *     security:
+ *      - bearerAuth: []
+ *     parameters:
+ *      - in: query
+ *        name: searchString
+ *        schema:
+ *          type: string
+ *     responses:
+ *       200:
+ *         description: Search cultures with query
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                $ref: '#/components/schemas/Culture'
+ *  */
+cultureRouter.get('/search', cultureController.searchCultures);
+
+/**
+ * @swagger
  * /culture/user/{id}:
  *   get:
  *     summary: Get User cultures

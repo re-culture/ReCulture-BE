@@ -1,11 +1,39 @@
 const prisma = require('../lib/prisma');
 const { DisclosureType } = require('@prisma/client');
+const { search } = require('../routes/category');
 
 exports.getAllPublicCultures = async (req, res) => {
   try {
     const cultures = await prisma.culturePost.findMany({
       where: {
         disclosure: DisclosureType.PUBLIC,
+      },
+      include: { photos: true },
+    });
+    res.status(200).json(cultures);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+exports.searchCultures = async (req, res) => {
+  try {
+    const searchString = req.query.searchString || '';
+    const cultures = await prisma.culturePost.findMany({
+      where: {
+        disclosure: DisclosureType.PUBLIC,
+        OR: [
+          {
+            title: {
+              contains: searchString,
+            },
+          },
+          {
+            review: {
+              contains: searchString,
+            },
+          },
+        ],
       },
       include: { photos: true },
     });

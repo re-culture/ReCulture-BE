@@ -134,9 +134,26 @@ ticketRouter.get('/:id', ticketController.getDetailTicket);
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
- *             $ref: '#/components/schemas/Ticket'
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *               emoji:
+ *                 type: string
+ *               date:
+ *                 type: string
+ *                 format: date-time
+ *               disclosure:
+ *                 type: string
+ *               review:
+ *                 type: string
+ *               photos:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                   format: binary
  *     responses:
  *       '200':
  *         description: Create a ticket

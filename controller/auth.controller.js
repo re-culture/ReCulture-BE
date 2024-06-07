@@ -3,6 +3,41 @@ const TokenUtils = require('../utils/tokenUtils');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
+exports.register = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const encodedPW = bcrypt.hashSync(password, 10);
+    const user = await prisma.user.create({
+      data: {
+        email,
+        password: encodedPW,
+      },
+    });
+
+    // Generate token
+    const accessToken = TokenUtils.generateAccessToken(user.id);
+    const refreshToken = TokenUtils.generateRefreshToken();
+
+    try {
+      // Save refresh token
+      await prisma.Token.create({
+        data: {
+          token: refreshToken,
+          userId: user.id,
+        },
+      });
+      return res.status(200).json({ id: user.id, accessToken, refreshToken });
+    } catch (error) {
+      return res.status(400).json({ error: error.message });
+    }
+  } catch (error) {
+    if (error.code === 'P2002') {
+      return res.status(400).json({ error: '이메일 중복 오류' });
+    }
+    res.status(400).json({ error: error.message });
+  }
+};
+
 exports.login = async (req, res) => {
   const { email, password } = req.body;
   try {

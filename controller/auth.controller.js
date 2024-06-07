@@ -98,13 +98,12 @@ exports.refresh = async (req, res) => {
       // Refresh token
       const refreshResult = TokenUtils.verifyRefreshToken(
         refreshToken,
-        decoded.id
+        decoded.userId
       );
       if (refreshResult.ok === false) {
         res.status(401).json({ error: 'No Authorized! (Login Again)' });
       }
-
-      const newAccessToken = TokenUtils.generateAccessToken(decoded.id);
+      const newAccessToken = TokenUtils.generateAccessToken(decoded.userId);
       res.status(200).json({ accessToken: newAccessToken, refreshToken });
     } else {
       res.status(200).json({ accessToken, refreshToken });

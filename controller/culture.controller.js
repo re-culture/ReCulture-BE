@@ -105,6 +105,31 @@ exports.getMyCulture = async (req, res) => {
   }
 };
 
+exports.getMyCalender = async (req, res) => {
+  try {
+    const authorId = req.user.id;
+    const { year, month } = req.query;
+    if (!year || !month) {
+      return res.status(400).json({ error: 'Invalid query' });
+    }
+    const startDate = new Date(year, month - 1, 1);
+    const endDate = new Date(year, month, 1);
+    const cultures = await prisma.culturePost.findMany({
+      where: {
+        authorId,
+        date: {
+          gte: startDate,
+          lt: endDate,
+        },
+      },
+      include: { photos: true },
+    });
+    res.status(200).json(cultures);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 exports.postCulture = async (req, res) => {
   if (!req.files) {
     return res.status(400).json({ error: 'Please upload a file' });

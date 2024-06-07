@@ -115,7 +115,7 @@ cultureRouter.get('/category/:id', cultureController.getCategoryCulture);
  *      - bearerAuth: []
  *     responses:
  *       200:
- *         description: Get all Category public cultures
+ *         description: Get my all Category public cultures
  *         content:
  *           application/json:
  *             schema:
@@ -124,6 +124,39 @@ cultureRouter.get('/category/:id', cultureController.getCategoryCulture);
  *                 $ref: '#/components/schemas/Culture'
  *  */
 cultureRouter.get('/my-culture', cultureController.getMyCulture);
+
+/**
+ * @swagger
+ * /culture/my-calender:
+ *   get:
+ *     summary: Get my category cultures for query month
+ *     tags: [Culture]
+ *     security:
+ *      - bearerAuth: []
+ *     parameters:
+ *      - in: query
+ *        name: year
+ *        schema:
+ *        type: integer
+ *        required: true
+ *        description: year
+ *      - in: query
+ *        name: month
+ *        schema:
+ *        type: integer
+ *        required: true
+ *        description: month
+ *     responses:
+ *       200:
+ *         description: Get my category cultures for query month
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Culture'
+ *  */
+cultureRouter.get('/my-calender', cultureController.getMyCalender);
 
 /**
  * @swagger
@@ -150,7 +183,6 @@ cultureRouter.get('/my-culture', cultureController.getMyCulture);
  *  */
 cultureRouter.get('/:id', cultureController.getDetailCulture);
 
-//TODO: Add swagger documentation(photos)
 /**
  * @swagger
  * /culture:

@@ -36,10 +36,6 @@ const options = {
               type: 'string',
               example: 'john@gmail.com',
             },
-            password: {
-              type: 'string',
-              example: '1111',
-            },
             createdAt: {
               type: 'DateTime',
               example: '2024-05-24T03:41:10.125Z',

@@ -40,6 +40,9 @@ exports.addUser = async (req, res) => {
     const filteredUser = exclude(user, ['password']);
     res.status(200).json(filteredUser);
   } catch (error) {
+    if (error.code === 'P2002') {
+      return res.status(400).json({ error: '이메일 중복 오류' });
+    }
     res.status(400).json({ error: error.message });
   }
 };

@@ -28,6 +28,31 @@ ticketRouter.get('/', ticketController.getAllPublicTickets);
 
 /**
  * @swagger
+ * /ticket/search:
+ *   get:
+ *     summary: Search tickets
+ *     tags: [Ticket]
+ *     security:
+ *      - bearerAuth: []
+ *     parameters:
+ *      - in: query
+ *        name: searchString
+ *        schema:
+ *          type: string
+ *     responses:
+ *       200:
+ *         description: Search tickets with query
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                $ref: '#/components/schemas/Ticket'
+ *  */
+ticketRouter.get('/search', ticketController.searchTickets);
+
+/**
+ * @swagger
  * /ticket/user/{id}:
  *   get:
  *     summary: Get User tickets

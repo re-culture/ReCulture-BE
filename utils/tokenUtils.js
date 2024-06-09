@@ -4,7 +4,7 @@ const JWT_KEY = process.env.ACCESS_TOKEN_SECRET;
 
 // Generate access token
 exports.generateAccessToken = (userId) => {
-  return jwt.sign({ userId }, JWT_KEY, { expiresIn: '1m' });
+  return jwt.sign({ userId }, JWT_KEY, { expiresIn: '3h' });
 };
 
 // Generate refresh token

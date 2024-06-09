@@ -89,7 +89,7 @@ profileRouter.post(
  *            birthdate:
  *             type: string
  *             format: date-time
- *            interests:
+ *            interest:
  *             type: string
  *            photo:
  *             type: string

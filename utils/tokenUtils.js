@@ -4,7 +4,7 @@ const JWT_KEY = process.env.ACCESS_TOKEN_SECRET;
 
 // Generate access token
 exports.generateAccessToken = (userId) => {
-  return jwt.sign({ userId }, JWT_KEY, { expiresIn: '3h' });
+  return jwt.sign({ userId }, JWT_KEY, { expiresIn: '1m' });
 };
 
 // Generate refresh token
@@ -13,11 +13,12 @@ exports.generateRefreshToken = () => {
 };
 
 // Verify refresh token
-exports.verifyRefreshToken = (token, userId) => {
+exports.verifyRefreshToken = async (token, userId) => {
   try {
-    const result = prisma.token.findUnique({
+    const result = await prisma.token.findUnique({
       where: {
         userId,
+        token,
       },
     });
     if (result.token === token) {

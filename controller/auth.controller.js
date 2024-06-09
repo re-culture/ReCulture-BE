@@ -95,18 +95,41 @@ exports.refresh = async (req, res) => {
     }
 
     if (authResult.ok === false && authResult.message === 'jwt expired') {
-      // Refresh token
-      const refreshResult = TokenUtils.verifyRefreshToken(
-        refreshToken,
-        decoded.userId
-      );
-      if (refreshResult.ok === false) {
-        res.status(401).json({ error: 'No Authorized! (Login Again)' });
+      try {
+        // Refresh token
+        const refreshResult = await TokenUtils.verifyRefreshToken(
+          refreshToken,
+          decoded.userId
+        );
+        if (refreshResult === false) {
+          return res
+            .status(401)
+            .json({ error: 'No Authorized! (Login Again)' });
+        }
+        const newAccessToken = TokenUtils.generateAccessToken(decoded.userId);
+        res.status(200).json({ accessToken: newAccessToken, refreshToken });
+      } catch (error) {
+        res.status(400).json({ error: error.message });
       }
-      const newAccessToken = TokenUtils.generateAccessToken(decoded.userId);
-      res.status(200).json({ accessToken: newAccessToken, refreshToken });
     } else {
       res.status(200).json({ accessToken, refreshToken });
+    }
+  } else {
+    res.status(401).json({ error: 'No Authorized! (No Token)' });
+  }
+};
+
+exports.logout = async (req, res) => {
+  if (req.headers['refresh']) {
+    try {
+      await prisma.token.delete({
+        where: {
+          token: req.headers['refresh'],
+        },
+      });
+      res.status(200).json({ message: 'Logout Success!' });
+    } catch (error) {
+      res.status(400).json({ error: error.message });
     }
   } else {
     res.status(401).json({ error: 'No Authorized! (No Token)' });

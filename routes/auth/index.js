@@ -100,4 +100,31 @@ authRouter.post('/login', authController.login);
 
 authRouter.get('/refresh', authController.refresh);
 
+/**
+ * @swagger
+ * /auth/logout:
+ *  post:
+ *   summary: logout
+ *   tags: [Auth]
+ *   security:
+ *    - bearerAuth: []
+ *   parameters:
+ *     - in: header
+ *       name: refresh
+ *       type: string
+ *       required: true
+ *   responses:
+ *    '200':
+ *      description: logout success
+ *      content:
+ *        application/json:
+ *         schema:
+ *           type: object
+ *           properties:
+ *            message:
+ *              type: string
+ * */
+
+authRouter.post('/logout', authController.logout);
+
 module.exports = authRouter;

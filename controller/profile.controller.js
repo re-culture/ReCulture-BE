@@ -1,5 +1,6 @@
 const prisma = require('../lib/prisma');
 const { LevelName } = require('@prisma/client');
+
 exports.createProfile = async (req, res) => {
   const profilePhoto = req.file
     ? `/uploads/profile/${req.file.filename}`
@@ -28,7 +29,7 @@ exports.updateProfile = async (req, res) => {
   const profilePhoto = req.file
     ? `/uploads/profile/${req.file.filename}`
     : '/uploads/profile/default.jpg';
-  const { nickname, bio, birthdate, interests } = req.body;
+  const { nickname, bio, birthdate, interest } = req.body;
   try {
     const profile = await prisma.profile.update({
       where: { userId: parseInt(userId) },
@@ -36,7 +37,7 @@ exports.updateProfile = async (req, res) => {
         nickname,
         bio,
         birthdate: birthdate ? new Date(birthdate) : null,
-        interests,
+        interest,
         profilePhoto,
       },
     });

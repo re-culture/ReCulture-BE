@@ -68,7 +68,7 @@ cultureRouter.get('/search', cultureController.searchCultures);
  *        description: User Id
  *     responses:
  *       200:
- *         description: Get all Users public cultures
+ *         description: Get all Users follower cultures
  *         content:
  *           application/json:
  *             schema:

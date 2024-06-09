@@ -68,7 +68,7 @@ ticketRouter.get('/search', ticketController.searchTickets);
  *        description: User Id
  *     responses:
  *       200:
- *         description: Get all Users public tickets
+ *         description: Get all Users follower tickets
  *         content:
  *           application/json:
  *             schema:

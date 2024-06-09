@@ -49,7 +49,7 @@ exports.getUserCulture = async (req, res) => {
     const cultures = await prisma.culturePost.findMany({
       where: {
         authorId: id,
-        disclosure: DisclosureType.PUBLIC,
+        disclosure: DisclosureType.FOLLOWER,
       },
       include: { photos: true },
     });

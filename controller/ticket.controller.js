@@ -50,7 +50,7 @@ exports.getUserTicket = async (req, res) => {
     const tickets = await prisma.ticketPost.findMany({
       where: {
         authorId: id,
-        disclosure: DisclosureType.PUBLIC,
+        disclosure: DisclosureType.FOLLOWER,
       },
       include: {
         photos: true,

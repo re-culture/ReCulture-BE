@@ -127,7 +127,7 @@ cultureRouter.get('/my-culture', cultureController.getMyCulture);
 
 /**
  * @swagger
- * /culture/my-calender:
+ * /culture/my-calendar:
  *   get:
  *     summary: Get my category cultures for query month
  *     tags: [Culture]
@@ -156,7 +156,7 @@ cultureRouter.get('/my-culture', cultureController.getMyCulture);
  *               items:
  *                 $ref: '#/components/schemas/Culture'
  *  */
-cultureRouter.get('/my-calender', cultureController.getMyCalender);
+cultureRouter.get('/my-calendar', cultureController.getMyCalendar);
 
 /**
  * @swagger

@@ -105,7 +105,7 @@ exports.getMyCulture = async (req, res) => {
   }
 };
 
-exports.getMyCalender = async (req, res) => {
+exports.getMyCalendar = async (req, res) => {
   try {
     const authorId = req.user.id;
     const { year, month } = req.query;

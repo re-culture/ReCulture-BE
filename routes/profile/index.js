@@ -48,7 +48,7 @@ profileRouter.get('/', profileController.getAllProfile);
  *            birthdate:
  *             type: string
  *             format: date-time
- *            interests:
+ *            interest:
  *             type: string
  *            photo:
  *             type: string

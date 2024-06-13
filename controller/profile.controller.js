@@ -69,10 +69,10 @@ exports.getAllProfile = async (req, res) => {
 };
 
 exports.getSpeceficProfile = async (req, res) => {
-  const { userId } = req.params;
+  const { id } = req.params;
   try {
     const profile = await prisma.profile.findUnique({
-      where: { userId: parseInt(userId) },
+      where: { userId: parseInt(id) },
     });
     res.status(200).json(profile);
   } catch (error) {

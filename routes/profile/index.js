@@ -176,7 +176,7 @@ profileRouter.put('/add-tick-exp', profileController.addTicketExp);
  *        schema:
  *        type: integer
  *        required: true
- *        description: Profile Id
+ *        description: User Id
  *     responses:
  *       200:
  *         description: Get Specific profile

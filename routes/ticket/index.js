@@ -24,7 +24,7 @@ ticketRouter.use(authMiddleware);
  *               items:
  *                $ref: '#/components/schemas/Ticket'
  *  */
-ticketRouter.get('/', ticketController.getAllPublicTickets);
+ticketRouter.get('/', ticketController.getAllAccessibleTickets);
 
 /**
  * @swagger

@@ -18,6 +18,42 @@ exports.getAllPublicTickets = async (req, res) => {
   }
 };
 
+exports.getAllAccessibleTickets = async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    const tickets = await prisma.ticketPost.findMany({
+      where: {
+        OR: [
+          {
+            disclosure: DisclosureType.PUBLIC,
+          },
+          {
+            AND: [
+              {
+                disclosure: DisclosureType.FOLLOWER,
+              },
+              {
+                author: {
+                  followers: {
+                    some: {
+                      followingId: userId,
+                    },
+                  },
+                },
+              },
+            ],
+          },
+        ],
+      },
+      include: { photos: true },
+    });
+    res.status(200).json(tickets);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 exports.searchTickets = async (req, res) => {
   try {
     const searchString = req.query.searchString || '';

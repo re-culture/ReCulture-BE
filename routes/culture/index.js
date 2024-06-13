@@ -24,7 +24,7 @@ cultureRouter.use(authMiddleware);
  *               items:
  *                $ref: '#/components/schemas/Culture'
  *  */
-cultureRouter.get('/', cultureController.getAllPublicCultures);
+cultureRouter.get('/', cultureController.getAllAccessibleCultures);
 
 /**
  * @swagger

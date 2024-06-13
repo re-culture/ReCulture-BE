@@ -43,6 +43,42 @@ exports.searchCultures = async (req, res) => {
   }
 };
 
+exports.getAllAccessibleCultures = async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    const cultures = await prisma.culturePost.findMany({
+      where: {
+        OR: [
+          {
+            disclosure: DisclosureType.PUBLIC,
+          },
+          {
+            AND: [
+              {
+                disclosure: DisclosureType.FOLLOWER,
+              },
+              {
+                author: {
+                  following: {
+                    some: {
+                      followerId: userId,
+                    },
+                  },
+                },
+              },
+            ],
+          },
+        ],
+      },
+      include: { photos: true },
+    });
+    res.status(200).json(cultures);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 exports.getUserCulture = async (req, res) => {
   try {
     const id = parseInt(req.params.id);

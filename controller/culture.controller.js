@@ -1,6 +1,6 @@
 const prisma = require('../lib/prisma');
 const { DisclosureType } = require('@prisma/client');
-const { search } = require('../routes/category');
+const { addExp } = require('../utils/updateExp');
 
 exports.getAllPublicCultures = async (req, res) => {
   try {
@@ -172,6 +172,8 @@ exports.postCulture = async (req, res) => {
     await prisma.photo.createMany({
       data: photoDocs,
     });
+
+    await addExp(authorId, 10);
 
     res.status(200).json({ culture, photoDocs });
   } catch (error) {

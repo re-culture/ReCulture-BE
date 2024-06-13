@@ -1,5 +1,6 @@
 const prisma = require('../lib/prisma');
 const { DisclosureType } = require('@prisma/client');
+const { addExp } = require('../utils/updateExp');
 
 exports.getAllPublicTickets = async (req, res) => {
   try {
@@ -139,6 +140,8 @@ exports.postTicket = async (req, res) => {
     await prisma.ticketPhoto.createMany({
       data: photoDocs,
     });
+
+    await addExp(authorId, 5);
 
     res.status(200).json({ ticket, photoDocs });
   } catch (error) {

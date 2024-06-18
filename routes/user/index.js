@@ -32,8 +32,6 @@ userRouter.get('/', userController.getAllUsers);
  *           schema:
  *             type: object
  *             properties:
- *               name:
- *                 type: string
  *               email:
  *                 type: string
  *               password:
@@ -44,18 +42,7 @@ userRouter.get('/', userController.getAllUsers);
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *             properties:
- *               id:
- *                 type: integer
- *               name:
- *                 type: string
- *               email:
- *                 type: string
- *               password:
- *                 type: string
- *               createdAt:
- *                 type: string
+ *               $ref: '#/components/schemas/User'
  * */
 userRouter.post('/', userController.addUser);
 

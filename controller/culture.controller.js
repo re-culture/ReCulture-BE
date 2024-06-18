@@ -1,5 +1,6 @@
 const prisma = require('../lib/prisma');
 const { DisclosureType } = require('@prisma/client');
+const { addExp } = require('../utils/updateExp');
 
 exports.getAllPublicCultures = async (req, res) => {
   try {
@@ -7,6 +8,70 @@ exports.getAllPublicCultures = async (req, res) => {
       where: {
         disclosure: DisclosureType.PUBLIC,
       },
+      include: { photos: true },
+    });
+    res.status(200).json(cultures);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+exports.searchCultures = async (req, res) => {
+  try {
+    const searchString = req.query.searchString || '';
+    const cultures = await prisma.culturePost.findMany({
+      where: {
+        disclosure: DisclosureType.PUBLIC,
+        OR: [
+          {
+            title: {
+              contains: searchString,
+            },
+          },
+          {
+            review: {
+              contains: searchString,
+            },
+          },
+        ],
+      },
+      include: { photos: true },
+    });
+    res.status(200).json(cultures);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+exports.getAllAccessibleCultures = async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    const cultures = await prisma.culturePost.findMany({
+      where: {
+        OR: [
+          {
+            disclosure: DisclosureType.PUBLIC,
+          },
+          {
+            AND: [
+              {
+                disclosure: DisclosureType.FOLLOWER,
+              },
+              {
+                author: {
+                  following: {
+                    some: {
+                      followerId: userId,
+                    },
+                  },
+                },
+              },
+            ],
+          },
+        ],
+      },
+      include: { photos: true },
     });
     res.status(200).json(cultures);
   } catch (error) {
@@ -20,8 +85,9 @@ exports.getUserCulture = async (req, res) => {
     const cultures = await prisma.culturePost.findMany({
       where: {
         authorId: id,
-        disclosure: DisclosureType.PUBLIC,
+        disclosure: DisclosureType.FOLLOWER,
       },
+      include: { photos: true },
     });
     res.status(200).json(cultures);
   } catch (error) {
@@ -37,6 +103,7 @@ exports.getCategoryCulture = async (req, res) => {
         categoryId: id,
         disclosure: DisclosureType.PUBLIC,
       },
+      include: { photos: true },
     });
     res.status(200).json(cultures);
   } catch (error) {
@@ -51,6 +118,7 @@ exports.getDetailCulture = async (req, res) => {
       where: {
         id,
       },
+      include: { photos: true },
     });
     res.status(200).json(culture);
   } catch (error) {
@@ -65,6 +133,32 @@ exports.getMyCulture = async (req, res) => {
       where: {
         authorId,
       },
+      include: { photos: true },
+    });
+    res.status(200).json(cultures);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+exports.getMyCalendar = async (req, res) => {
+  try {
+    const authorId = req.user.id;
+    const { year, month } = req.query;
+    if (!year || !month) {
+      return res.status(400).json({ error: 'Invalid query' });
+    }
+    const startDate = new Date(year, month - 1, 1);
+    const endDate = new Date(year, month, 1);
+    const cultures = await prisma.culturePost.findMany({
+      where: {
+        authorId,
+        date: {
+          gte: startDate,
+          lt: endDate,
+        },
+      },
+      include: { photos: true },
     });
     res.status(200).json(cultures);
   } catch (error) {
@@ -73,6 +167,9 @@ exports.getMyCulture = async (req, res) => {
 };
 
 exports.postCulture = async (req, res) => {
+  if (!req.files) {
+    return res.status(400).json({ error: 'Please upload a file' });
+  }
   try {
     const {
       title,
@@ -92,7 +189,7 @@ exports.postCulture = async (req, res) => {
         title,
         emoji,
         date,
-        categoryId,
+        categoryId: parseInt(categoryId),
         authorId,
         disclosure,
         review,
@@ -102,40 +199,20 @@ exports.postCulture = async (req, res) => {
         detail4,
       },
     });
-    res.status(200).json(culture);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
-};
 
-/*
-exports.getUser = async (req, res) => {
-  try {
-    const id = parseInt(req.params.id);
-    const user = await prisma.user.findUnique({
-      where: {
-        id,
-      },
-    });
-    res.status(200).json(user);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
-};
+    const photoDocs = req.files.map((file) => ({
+      culturePostId: culture.id,
+      url: `/uploads/${req.user.id}/${file.filename}`,
+    }));
 
-exports.addUser = async (req, res) => {
-  try {
-    const { name, email, password } = req.body;
-    const user = await prisma.user.create({
-      data: {
-        name,
-        email,
-        password,
-      },
+    await prisma.photo.createMany({
+      data: photoDocs,
     });
-    res.status(200).json(user);
+
+    await addExp(authorId, 10);
+
+    res.status(200).json({ culture, photoDocs });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 };
-*/

@@ -3,6 +3,40 @@ const authController = require('../../controller/auth.controller');
 
 /**
  * @swagger
+ * /auth/register:
+ *  post:
+ *    summary: Register to user
+ *    tags: [Auth]
+ *    requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            type: object
+ *            properties:
+ *              email:
+ *                type: string
+ *              password:
+ *                type: string
+ *    responses:
+ *        '200':
+ *          description: Register to user
+ *          content:
+ *            application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                  id:
+ *                    type: integer
+ *                  accessToken:
+ *                    type: string
+ *                  refreshToken:
+ *                    type: string
+ * */
+authRouter.post('/register', authController.register);
+
+/**
+ * @swagger
  * /auth/login:
  *  post:
  *    summary: Login to user
@@ -41,11 +75,9 @@ authRouter.post('/login', authController.login);
  *  get:
  *   summary: Refresh token
  *   tags: [Auth]
+ *   security:
+ *    - bearerAuth: []
  *   parameters:
- *     - in: header
- *       name: authorization
- *       type: string
- *       required: true
  *     - in: header
  *       name: refresh
  *       type: string
@@ -67,5 +99,32 @@ authRouter.post('/login', authController.login);
  * */
 
 authRouter.get('/refresh', authController.refresh);
+
+/**
+ * @swagger
+ * /auth/logout:
+ *  post:
+ *   summary: logout
+ *   tags: [Auth]
+ *   security:
+ *    - bearerAuth: []
+ *   parameters:
+ *     - in: header
+ *       name: refresh
+ *       type: string
+ *       required: true
+ *   responses:
+ *    '200':
+ *      description: logout success
+ *      content:
+ *        application/json:
+ *         schema:
+ *           type: object
+ *           properties:
+ *            message:
+ *              type: string
+ * */
+
+authRouter.post('/logout', authController.logout);
 
 module.exports = authRouter;

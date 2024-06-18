@@ -19,30 +19,39 @@ enum DisclosureType {
   PRIVATE
 }
 
+enum FollowRequestStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
+enum LevelName {
+  Freshman
+  Sophomore
+  Junior
+  Senior
+}
+
 model User {
-  id        Int           @id @default(autoincrement())
-  email     String        @unique
-  password  String
-  name      String?
-  articles  Article[]
-  posts     CulturePost[]
-  tokens    Token[]
-  createdAt DateTime      @default(now())
+  id                     Int             @id @default(autoincrement())
+  email                  String          @unique
+  password               String
+  profile                Profile?
+  posts                  CulturePost[]
+  ticketPosts            TicketPost[]
+  tokens                 Token[]
+  createdAt              DateTime        @default(now())
+  sentFollowRequests     FollowRequest[] @relation("FollowRequestSender")
+  receivedFollowRequests FollowRequest[] @relation("FollowRequestReceiver")
+  followers              Follow[]        @relation("Following")
+  following              Follow[]        @relation("Follower")
 }
 
 model Token {
   id     Int    @id @default(autoincrement())
-  token  String
+  token  String @unique
   userId Int
   user   User   @relation(fields: [userId], references: [id])
-}
-
-model Article {
-  id       Int     @id @default(autoincrement())
-  title    String
-  body     String?
-  author   User    @relation(fields: [authorId], references: [id])
-  authorId Int
 }
 
 model CulturePost {
@@ -60,6 +69,9 @@ model CulturePost {
   detail4    String?
   author     User           @relation(fields: [authorId], references: [id])
   authorId   Int
+  photos     Photo[]
+  createdAt  DateTime       @default(now())
+  updatedAt  DateTime       @updatedAt
 }
 
 model CategoryDetail {
@@ -70,4 +82,75 @@ model CategoryDetail {
   detail3_name  String
   detail4_name  String?
   CulturePost   CulturePost[]
+  TicketPost    TicketPost[]
+}
+
+model Photo {
+  id            Int         @id @default(autoincrement())
+  url           String
+  culturePost   CulturePost @relation(fields: [culturePostId], references: [id])
+  culturePostId Int
+}
+
+model FollowRequest {
+  id         Int                 @id @default(autoincrement())
+  fromUserId Int
+  toUserId   Int
+  status     FollowRequestStatus @default(PENDING)
+  createdAt  DateTime            @default(now())
+  updatedAt  DateTime            @updatedAt
+
+  sender   User @relation("FollowRequestSender", fields: [fromUserId], references: [id])
+  receiver User @relation("FollowRequestReceiver", fields: [toUserId], references: [id])
+
+  @@unique([fromUserId, toUserId])
+}
+
+model Follow {
+  id          Int      @id @default(autoincrement())
+  followerId  Int
+  followingId Int
+  createdAt   DateTime @default(now())
+
+  follower  User @relation("Following", fields: [followerId], references: [id])
+  following User @relation("Follower", fields: [followingId], references: [id])
+
+  @@unique([followerId, followingId])
+}
+
+model Profile {
+  id           Int       @id @default(autoincrement())
+  userId       Int       @unique
+  user         User      @relation(fields: [userId], references: [id])
+  nickname     String
+  bio          String?
+  birthdate    DateTime?
+  interest     String?
+  profilePhoto String
+  exp          Int       @default(0)
+  levelId      Int       @default(1)
+  level        LevelName @default(Freshman)
+}
+
+model TicketPost {
+  id         Int            @id @default(autoincrement())
+  title      String
+  emoji      String
+  date       DateTime
+  categoryId Int
+  category   CategoryDetail @relation(fields: [categoryId], references: [id])
+  disclosure DisclosureType
+  review     String
+  author     User           @relation(fields: [authorId], references: [id])
+  authorId   Int
+  photos     TicketPhoto[]
+  createdAt  DateTime       @default(now())
+  updatedAt  DateTime       @updatedAt
+}
+
+model TicketPhoto {
+  id           Int        @id @default(autoincrement())
+  url          String
+  ticketPost   TicketPost @relation(fields: [ticketPostId], references: [id])
+  ticketPostId Int
 }

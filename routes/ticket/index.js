@@ -1,37 +1,37 @@
-const cultureRouter = require('express').Router();
-const cultureController = require('../../controller/culture.controller');
+const ticketRouter = require('express').Router();
+const ticketController = require('../../controller/ticket.controller');
 const authMiddleware = require('../../utils/auth.middleware');
 const photoUploader = require('../../lib/photo_uploader');
 
 // Middleware
-cultureRouter.use(authMiddleware);
+ticketRouter.use(authMiddleware);
 
 /**
  * @swagger
- * /culture:
+ * /ticket:
  *   get:
- *     summary: Get all cultures
- *     tags: [Culture]
+ *     summary: Get all tickets
+ *     tags: [Ticket]
  *     security:
  *      - bearerAuth: []
  *     responses:
  *       200:
- *         description: Get all public cultures
+ *         description: Get all public tickets
  *         content:
  *           application/json:
  *             schema:
  *               type: array
  *               items:
- *                $ref: '#/components/schemas/Culture'
+ *                $ref: '#/components/schemas/Ticket'
  *  */
-cultureRouter.get('/', cultureController.getAllAccessibleCultures);
+ticketRouter.get('/', ticketController.getAllAccessibleTickets);
 
 /**
  * @swagger
- * /culture/search:
+ * /ticket/search:
  *   get:
- *     summary: Search cultures
- *     tags: [Culture]
+ *     summary: Search tickets
+ *     tags: [Ticket]
  *     security:
  *      - bearerAuth: []
  *     parameters:
@@ -41,22 +41,22 @@ cultureRouter.get('/', cultureController.getAllAccessibleCultures);
  *          type: string
  *     responses:
  *       200:
- *         description: Search cultures with query
+ *         description: Search tickets with query
  *         content:
  *           application/json:
  *             schema:
  *               type: array
  *               items:
- *                $ref: '#/components/schemas/Culture'
+ *                $ref: '#/components/schemas/Ticket'
  *  */
-cultureRouter.get('/search', cultureController.searchCultures);
+ticketRouter.get('/search', ticketController.searchTickets);
 
 /**
  * @swagger
- * /culture/user/{id}:
+ * /ticket/user/{id}:
  *   get:
- *     summary: Get User cultures
- *     tags: [Culture]
+ *     summary: Get User tickets
+ *     tags: [Ticket]
  *     security:
  *      - bearerAuth: []
  *     parameters:
@@ -68,22 +68,22 @@ cultureRouter.get('/search', cultureController.searchCultures);
  *        description: User Id
  *     responses:
  *       200:
- *         description: Get all Users follower cultures
+ *         description: Get all Users follower tickets
  *         content:
  *           application/json:
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/Culture'
+ *                 $ref: '#/components/schemas/Ticket'
  *  */
-cultureRouter.get('/user/:id', cultureController.getUserCulture);
+ticketRouter.get('/user/:id', ticketController.getUserTicket);
 
 /**
  * @swagger
- * /culture/category/{id}:
+ * /ticket/category/{id}:
  *   get:
- *     summary: Get all category cultures
- *     tags: [Culture]
+ *     summary: Get all category tickets
+ *     tags: [Ticket]
  *     security:
  *      - bearerAuth: []
  *     parameters:
@@ -95,75 +95,42 @@ cultureRouter.get('/user/:id', cultureController.getUserCulture);
  *        description: Category Id
  *     responses:
  *       200:
- *         description: Get all Category public cultures
+ *         description: Get all Category public tickets
  *         content:
  *           application/json:
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/Culture'
+ *                 $ref: '#/components/schemas/Ticket'
  *  */
-cultureRouter.get('/category/:id', cultureController.getCategoryCulture);
+ticketRouter.get('/category/:id', ticketController.getCategoryTicket);
 
 /**
  * @swagger
- * /culture/my-culture:
+ * /ticket/my-ticket:
  *   get:
- *     summary: Get my all category cultures
- *     tags: [Culture]
+ *     summary: Get my all tickets
+ *     tags: [Ticket]
  *     security:
  *      - bearerAuth: []
  *     responses:
  *       200:
- *         description: Get my all Category public cultures
+ *         description: Get all tickets
  *         content:
  *           application/json:
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/Culture'
+ *                 $ref: '#/components/schemas/Ticket'
  *  */
-cultureRouter.get('/my-culture', cultureController.getMyCulture);
+ticketRouter.get('/my-ticket', ticketController.getMyTicket);
 
 /**
  * @swagger
- * /culture/my-calendar:
+ * /ticket/{id}:
  *   get:
- *     summary: Get my category cultures for query month
- *     tags: [Culture]
- *     security:
- *      - bearerAuth: []
- *     parameters:
- *      - in: query
- *        name: year
- *        schema:
- *        type: integer
- *        required: true
- *        description: year
- *      - in: query
- *        name: month
- *        schema:
- *        type: integer
- *        required: true
- *        description: month
- *     responses:
- *       200:
- *         description: Get my category cultures for query month
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/Culture'
- *  */
-cultureRouter.get('/my-calendar', cultureController.getMyCalendar);
-
-/**
- * @swagger
- * /culture/{id}:
- *   get:
- *     summary: Get specific culture post
- *     tags: [Culture]
+ *     summary: Get specific ticket post
+ *     tags: [Ticket]
  *     security:
  *      - bearerAuth: []
  *     parameters:
@@ -172,25 +139,23 @@ cultureRouter.get('/my-calendar', cultureController.getMyCalendar);
  *        schema:
  *        type: integer
  *        required: true
- *        description: Culture Post Id
+ *        description: Ticket Post Id
  *     responses:
  *       200:
- *         description: Get Specific culture post
+ *         description: Get Specific ticket post
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Culture'
+ *               $ref: '#/components/schemas/Ticket'
  *  */
-cultureRouter.get('/:id', cultureController.getDetailCulture);
+ticketRouter.get('/:id', ticketController.getDetailTicket);
 
 /**
  * @swagger
- * /culture:
+ * /ticket:
  *   post:
- *     summary: Create a culture
- *     tags: [Culture]
- *     security:
- *      - bearerAuth: []
+ *     summary: Create a ticket
+ *     tags: [Ticket]
  *     requestBody:
  *       required: true
  *       content:
@@ -206,18 +171,10 @@ cultureRouter.get('/:id', cultureController.getDetailCulture);
  *                 type: string
  *                 format: date-time
  *               categoryId:
- *                 type: string
+ *                 type: integer
  *               disclosure:
  *                 type: string
  *               review:
- *                 type: string
- *               detail1:
- *                 type: string
- *               detail2:
- *                 type: string
- *               detail3:
- *                 type: string
- *               detail4:
  *                 type: string
  *               photos:
  *                 type: array
@@ -226,29 +183,29 @@ cultureRouter.get('/:id', cultureController.getDetailCulture);
  *                   format: binary
  *     responses:
  *       '200':
- *         description: Create a culture
+ *         description: Create a ticket
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
- *                culture:
+ *                ticket:
  *                 type: object
- *                 $ref: '#/components/schemas/Culture'
+ *                 $ref: '#/components/schemas/Ticket'
  *                photoDocs:
  *                  type: array
  *                  items:
  *                   type: object
  *                   properties:
- *                     culturePostId:
+ *                     ticketPostId:
  *                      type: integer
  *                     url:
  *                      type: string
  */
-cultureRouter.post(
+ticketRouter.post(
   '/',
   photoUploader.array('photos', 5),
-  cultureController.postCulture
+  ticketController.postTicket
 );
 
-module.exports = cultureRouter;
+module.exports = ticketRouter;

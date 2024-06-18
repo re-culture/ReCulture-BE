@@ -96,6 +96,35 @@ exports.getMyFollowRequest = async (req, res) => {
   }
 };
 
+exports.getMyPendingRequests = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const followRequest = await prisma.followRequest.findMany({
+      where: {
+        toUserId: userId,
+        status: FollowRequestStatus.PENDING,
+      },
+    });
+    res.status(200).json(followRequest);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+exports.getMyFollowRequestSent = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const followRequest = await prisma.followRequest.findMany({
+      where: {
+        fromUserId: userId,
+      },
+    });
+    res.status(200).json(followRequest);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 exports.getMyFollowers = async (req, res) => {
   try {
     const userId = req.user.id;

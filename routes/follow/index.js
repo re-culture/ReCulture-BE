@@ -27,6 +27,46 @@ followRouter.get('/', followController.getMyFollowRequest);
 
 /**
  * @swagger
+ * /follow/pending:
+ *   get:
+ *     summary: Get pending users follow request
+ *     tags: [Follow]
+ *     security:
+ *      - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Get pending users follow request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                $ref: '#/components/schemas/FollowRequest'
+ *  */
+followRouter.get('/pending', followController.getMyPendingRequests);
+
+/**
+ * @swagger
+ * /follow/sent:
+ *   get:
+ *     summary: Get all users sent follow request
+ *     tags: [Follow]
+ *     security:
+ *      - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Get all users sent follow request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                $ref: '#/components/schemas/FollowRequest'
+ *  */
+followRouter.get('/sent', followController.getMyFollowRequestSent);
+
+/**
+ * @swagger
  * /follow/request:
  *   post:
  *     summary: Create Follow Request

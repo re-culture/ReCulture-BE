@@ -205,6 +205,10 @@ const options = {
               type: 'DateTime',
               example: '2024-05-24T03:41:10.125Z',
             },
+            categoryId: {
+              type: 'integer',
+              example: 1,
+            },
             authorId: {
               type: 'integer',
               example: 1,

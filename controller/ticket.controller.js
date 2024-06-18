@@ -163,6 +163,7 @@ exports.postTicket = async (req, res) => {
         title,
         emoji,
         date,
+        categoryId: parseInt(categoryId),
         authorId,
         disclosure,
         review,

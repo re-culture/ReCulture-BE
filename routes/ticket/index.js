@@ -109,13 +109,13 @@ ticketRouter.get('/category/:id', ticketController.getCategoryTicket);
  * @swagger
  * /ticket/my-ticket:
  *   get:
- *     summary: Get my all category tickets
+ *     summary: Get my all tickets
  *     tags: [Ticket]
  *     security:
  *      - bearerAuth: []
  *     responses:
  *       200:
- *         description: Get all Category public tickets
+ *         description: Get all tickets
  *         content:
  *           application/json:
  *             schema:
@@ -170,6 +170,8 @@ ticketRouter.get('/:id', ticketController.getDetailTicket);
  *               date:
  *                 type: string
  *                 format: date-time
+ *               categoryId:
+ *                 type: integer
  *               disclosure:
  *                 type: string
  *               review:

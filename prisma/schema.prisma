@@ -82,6 +82,7 @@ model CategoryDetail {
   detail3_name  String
   detail4_name  String?
   CulturePost   CulturePost[]
+  TicketPost    TicketPost[]
 }
 
 model Photo {
@@ -136,6 +137,8 @@ model TicketPost {
   title      String
   emoji      String
   date       DateTime
+  categoryId Int
+  category   CategoryDetail @relation(fields: [categoryId], references: [id])
   disclosure DisclosureType
   review     String
   author     User           @relation(fields: [authorId], references: [id])

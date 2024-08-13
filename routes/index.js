@@ -6,6 +6,7 @@ const category = require('./category');
 const follow = require('./follow');
 const profile = require('./profile');
 const ticket = require('./ticket');
+const bookmark = require('./bookmark');
 
 /**
  * @swagger
@@ -62,6 +63,14 @@ router.use('/profile', profile);
  *  description: Ticket Management
  */
 router.use('/ticket', ticket);
+
+/**
+ * @swagger
+ * tags:
+ *   name: Bookmark
+ *   description: Bookmark Management
+ */
+router.use('/bookmark', bookmark);
 
 /**
  * @swagger

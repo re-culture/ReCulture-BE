@@ -8,12 +8,13 @@ const responseMiddleware = async (req, res, next) => {
       });
     };
   
-    res.error = (status, message) => {
+    res.error = (status, message, detail) => {
       res.status(status).json({
         timestamp: new Date().toISOString(),
         success: false,
         status: status,
-        error: message
+        error: message,
+        detail: detail
       });
     };
   

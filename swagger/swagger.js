@@ -299,6 +299,35 @@ const options = {
             },
           },
         },
+        Bookmark: {
+          type: 'object',
+          properties: {
+            id: {
+              type: 'integer',
+              example: 1,
+            },
+            userId: {
+              type: 'integer',
+              example: 1,
+            },
+            postId: {
+              type: 'integer',
+              example: 1,
+            },
+            createdAt: {
+              type: 'DateTime',
+              example: '2024-05-24T03:41:10.125Z',
+            },
+            updatedAt: {
+              type: 'DateTime',
+              example: '2024-05-24T03:41:10.125Z',
+            },
+            post: {
+              $ref: '#/components/schemas/Culture',
+              nullable: true,
+            },
+          },
+        },
       },
     },
     security: [

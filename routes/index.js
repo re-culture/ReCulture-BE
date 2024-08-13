@@ -79,7 +79,7 @@ router.use('/ticket', ticket);
  *               example: Hello World
  *  */
 router.get('/test', (req, res) => {
-  res.send('Hello World');
+  res.success('Hello World');
 });
 
 module.exports = router;

@@ -4,10 +4,12 @@ const port = process.env.port || 8080;
 const app = express();
 const path = require('path');
 const api = require('./routes/index');
+const responseMiddleware = require('./utils/response.middleware');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use(responseMiddleware);
 app.use('/api', api);
 
 // Swagger

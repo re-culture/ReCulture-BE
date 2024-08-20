@@ -219,12 +219,12 @@ exports.postCulture = async (req, res) => {
 
 exports.putCulture = async (req, res) => {
   if (!req.files || req.files.length === 0) {
-    return res.status(400).json({ error: 'Please upload a file' });
+    return res.error(400, '파일을 업로드해주세요.', 'Please upload a file');
   }
   try {
     const id = parseInt(req.params.id);
     if (!id || isNaN(id)) {
-      return res.status(400).json({ error: 'Invalid id' });
+      return res.error(400, "유효하지 않은 기록 id입니다.", "Invalid id");
     }
 
     const {
@@ -242,10 +242,13 @@ exports.putCulture = async (req, res) => {
 
     const parsedCategoryId = parseInt(categoryId);
     if (!parsedCategoryId || isNaN(parsedCategoryId)) {
-      return res.status(400).json({ error: 'Invalid categoryId' });
+      return res.error(400, "유효하지 않은 카테고리 id입니다.", "Invalid categoryId");
     }
     
     const authorId = req.user.id;
+    if (!authorId) {
+      return res.error(401, "로그인이 필요합니다.", "Unauthorized");
+    }
 
     const result = await prisma.$transaction(async (prisma) => {
       const culture = await prisma.culturePost.update({
@@ -292,13 +295,20 @@ exports.putCulture = async (req, res) => {
 exports.deleteCulture = async (req, res) => {
   try {
     const id = parseInt(req.params.id);
+    if (!id || isNaN(id)) {
+      return res.error(400, '유효하지 않은 기록 id입니다.', 'Invalid id');
+    }
     const authorId = req.user.id;
+    if (!authorId) {
+      return res.error(401, '로그인이 필요합니다.', 'Unauthorized');
+    }
     const culture = await prisma.culturePost.delete({
       where: { id, authorId },
     });
 
     res.success(culture);
   } catch (error) {
+    console.error(error);
     res.error(500, "기록을 삭제하는 중 오류가 발생했습니다.", error.message);
   }
 };

@@ -10,7 +10,7 @@ bookmarkRouter.use(authMiddleware);
  * /bookmark:
  *   get:
  *     summary: Get users bookmark posts
- *     tags: [bookmark]
+ *     tags: [Bookmark]
  *     security:
  *      - bearerAuth: []
  *     responses:
@@ -30,7 +30,7 @@ bookmarkRouter.get('/', bookmarkController.getMyBookmarks);
  * /bookmark/toggle:
  *   post:
  *     summary: Toggle Bookmark
- *     tags: [bookmark]
+ *     tags: [Bookmark]
  *     security:
  *      - bearerAuth: []
  *     requestBody:

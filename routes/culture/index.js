@@ -251,4 +251,104 @@ cultureRouter.post(
   cultureController.postCulture
 );
 
+/**
+ * @swagger
+ * /culture/{id}:
+ *   put:
+ *     summary: Modify culture
+ *     tags: [Culture]
+ *     security:
+ *      - bearerAuth: []
+ *     parameters:
+ *      - in: path
+ *        name: id
+ *        schema:
+ *          type: integer
+ *          required: true
+ *          description: Culture Post Id
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *               emoji:
+ *                 type: string
+ *               date:
+ *                 type: string
+ *                 format: date-time
+ *               categoryId:
+ *                 type: string
+ *               disclosure:
+ *                 type: string
+ *               review:
+ *                 type: string
+ *               detail1:
+ *                 type: string
+ *               detail2:
+ *                 type: string
+ *               detail3:
+ *                 type: string
+ *               detail4:
+ *                 type: string
+ *               photos:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                   format: binary
+ *     responses:
+ *       '200':
+ *         description: Create a culture
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                culture:
+ *                 type: object
+ *                 $ref: '#/components/schemas/Culture'
+ *                photoDocs:
+ *                  type: array
+ *                  items:
+ *                   type: object
+ *                   properties:
+ *                     culturePostId:
+ *                      type: integer
+ *                     url:
+ *                      type: string
+ */
+cultureRouter.put(
+  '/:id',
+  photoUploader.array('photos', 5),
+  cultureController.putCulture
+);
+
+/**
+ * @swagger
+ * /culture/{id}:
+ *   delete:
+ *     summary: Delete specific culture post
+ *     tags: [Culture]
+ *     security:
+ *      - bearerAuth: []
+ *     parameters:
+ *      - in: path
+ *        name: id
+ *        schema:
+ *        type: integer
+ *        required: true
+ *        description: Culture Post Id
+ *     responses:
+ *       200:
+ *         description: Delete Specific culture post
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Culture'
+ *  */
+cultureRouter.delete('/:id', cultureController.deleteCulture);
+
 module.exports = cultureRouter;

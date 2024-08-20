@@ -216,3 +216,89 @@ exports.postCulture = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
+
+exports.putCulture = async (req, res) => {
+  if (!req.files || req.files.length === 0) {
+    return res.status(400).json({ error: 'Please upload a file' });
+  }
+  try {
+    const id = parseInt(req.params.id);
+    if (!id || isNaN(id)) {
+      return res.status(400).json({ error: 'Invalid id' });
+    }
+
+    const {
+      title,
+      emoji,
+      date,
+      categoryId,
+      disclosure,
+      review,
+      detail1,
+      detail2,
+      detail3,
+      detail4,
+    } = req.body;
+
+    const parsedCategoryId = parseInt(categoryId);
+    if (!parsedCategoryId || isNaN(parsedCategoryId)) {
+      return res.status(400).json({ error: 'Invalid categoryId' });
+    }
+    
+    const authorId = req.user.id;
+
+    const result = await prisma.$transaction(async (prisma) => {
+      const culture = await prisma.culturePost.update({
+        where: { id },
+        data: {
+          title,
+          emoji,
+          date,
+          categoryId: parsedCategoryId,
+          authorId,
+          disclosure,
+          review,
+          detail1,
+          detail2,
+          detail3,
+          detail4,
+        },
+      });
+  
+      await prisma.photo.deleteMany({
+        where: {
+          culturePostId: id,
+        },
+      });
+  
+      const photoDocs = req.files.map((file) => ({
+        culturePostId: culture.id,
+        url: `/uploads/${req.user.id}/${file.filename}`,
+      }));
+  
+      await prisma.photo.createMany({
+        data: photoDocs,
+      });
+      return { culture, photoDocs };
+    });
+    
+    res.success(result);
+  } catch (error) {
+    console.error(error);
+    res.error(500, "기록을 수정하는 중 오류가 발생했습니다.", error.message);
+  }
+};
+
+exports.deleteCulture = async (req, res) => {
+  try {
+    const id = parseInt(req.params.id);
+    const authorId = req.user.id;
+    const culture = await prisma.culturePost.delete({
+      where: { id, authorId },
+    });
+
+    res.success(culture);
+  } catch (error) {
+    res.error(500, "기록을 삭제하는 중 오류가 발생했습니다.", error.message);
+  }
+};

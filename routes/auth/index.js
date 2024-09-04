@@ -1,5 +1,6 @@
 const authRouter = require('express').Router();
 const authController = require('../../controller/auth.controller');
+const authMiddleware = require('../../utils/auth.middleware');
 
 /**
  * @swagger
@@ -126,5 +127,34 @@ authRouter.get('/refresh', authController.refresh);
  * */
 
 authRouter.post('/logout', authController.logout);
+
+/**
+ * @swagger
+ * /auth/change_password:
+ *  post:
+ *   summary: Change password
+ *   tags: [Auth]
+ *   security:
+ *     - bearerAuth: []
+ *   requestBody:
+ *     required: true
+ *     content:
+ *       application/json:
+ *         schema:
+ *           type: object
+ *           properties:
+ *             cur_password:
+ *               type: string
+ *             new_password:
+ *               type: string
+ *   responses:
+ *     '200':
+ *       description: Change password
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/User'
+ */
+authRouter.post('/change_password', authMiddleware, authController.changePassword);
 
 module.exports = authRouter;

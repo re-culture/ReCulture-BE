@@ -2,6 +2,7 @@ const prisma = require('../lib/prisma');
 const TokenUtils = require('../utils/tokenUtils');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+const { exclude } = require('../utils/excludeField');
 
 exports.register = async (req, res) => {
   try {
@@ -135,3 +136,33 @@ exports.logout = async (req, res) => {
     res.status(401).json({ error: 'No Authorized! (No Token)' });
   }
 };
+
+exports.changePassword = async (req, res) => {
+  try {
+    const { cur_password, new_password } = req.body;
+    const user = await prisma.user.findUnique({
+      where: {
+        id: req.user.id,
+      },
+    });
+
+    if (bcrypt.compareSync(cur_password, user.password) === false) {
+      return res.error(401, '비밀번호가 일치하지 않습니다.', 'Invalid password');
+    }
+
+    const encodedPW = bcrypt.hashSync(new_password, 10);
+    const updatedUser = await prisma.user.update({
+      where: {
+        id: req.user.id,
+      },
+      data: {
+        password: encodedPW,
+      },
+    });
+    const filteredUser = exclude(updatedUser, ['password']);
+
+    res.success(filteredUser);
+  } catch (error) {
+    res.error(500, "비밀번호 변경 중 오류가 발생했습니다.", error.message);
+  }
+}

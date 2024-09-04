@@ -162,6 +162,34 @@ profileRouter.put('/add-cul-exp', profileController.addCultureExp);
  *  */
 profileRouter.put('/add-tick-exp', profileController.addTicketExp);
 
+
+/**
+ * @swagger
+ * /profile/search:
+ *  get:
+ *   summary: Search User Profile
+ *   tags: [Profile]
+ *   security:
+ *    - bearerAuth: []
+ *   parameters:
+ *     - in: query
+ *       name: nickname
+ *       schema:
+ *         type: string
+ *         required: false
+ *         description: User Nickname
+ *   responses:
+ *     200:
+ *      description: Search User Profile
+ *      content:
+ *        application/json:
+ *          schema:
+ *            type: array
+ *            items:
+ *              $ref: '#/components/schemas/Profile'
+ * */
+profileRouter.get('/search', profileController.searchProfile);
+
 /**
  * @swagger
  * /profile/{id}:

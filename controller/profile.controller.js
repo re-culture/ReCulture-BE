@@ -80,6 +80,25 @@ exports.getSpeceficProfile = async (req, res) => {
   }
 };
 
+exports.searchProfile = async (req, res) => {
+  const nickname = req.query.nickname || '';
+  try {
+    const profiles = await prisma.profile.findMany({
+      where: {
+        nickname: {
+          contains: nickname,
+        },
+      },
+    });/*
+    if (profiles.length === 0) {
+      return res.error (404, "검색 결과가 없습니다.", "검색 결과가 없습니다.");
+    }*/
+    res.success(profiles);
+  } catch (error) {
+    res.error(500, "유저 검색 중 오류가 발생했습니다.", error.message);
+  }
+}
+
 exports.addCultureExp = async (req, res) => {
   const userId = req.user.id;
   try {

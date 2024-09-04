@@ -131,7 +131,7 @@ authRouter.post('/logout', authController.logout);
 /**
  * @swagger
  * /auth/change_password:
- *  post:
+ *  put:
  *   summary: Change password
  *   tags: [Auth]
  *   security:
@@ -155,6 +155,6 @@ authRouter.post('/logout', authController.logout);
  *           schema:
  *             $ref: '#/components/schemas/User'
  */
-authRouter.post('/change_password', authMiddleware, authController.changePassword);
+authRouter.put('/change_password', authMiddleware, authController.changePassword);
 
 module.exports = authRouter;

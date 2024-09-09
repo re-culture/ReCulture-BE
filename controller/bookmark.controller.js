@@ -65,8 +65,15 @@ exports.getMyBookmarks = async (req, res) => {
                 post: {
                     include: {
                         photos: true,
+                        author: {
+                            select: {
+                                id: true,
+                                email: true,
+                                profile: true
+                            }
+                        }
                     }
-                }
+                },
             }
         });
 

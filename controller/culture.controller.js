@@ -118,8 +118,13 @@ exports.getDetailCulture = async (req, res) => {
       where: {
         id,
       },
-      include: { photos: true },
+      include: { photos: true, Bookmark: true },
     });
+
+    culture.isBookmarked = culture.Bookmark.some(
+      (bookmark) => bookmark.userId === req.user.id
+    );
+    
     res.status(200).json(culture);
   } catch (error) {
     res.status(400).json({ error: error.message });

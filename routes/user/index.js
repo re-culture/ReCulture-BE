@@ -1,5 +1,6 @@
 const userRouter = require('express').Router();
 const userController = require('../../controller/user.controller');
+const authMiddleware = require('../../utils/auth.middleware');
 
 /**
  * @swagger
@@ -66,5 +67,23 @@ userRouter.post('/', userController.addUser);
  *               $ref: '#/components/schemas/User'
  * */
 userRouter.get('/:id', userController.getUser);
+
+/**
+ * @swagger
+ * /user/delete:
+ *   delete:
+ *    summary: Delete a user
+ *    tags: [User]
+ *    security:
+ *      - bearerAuth: []
+ *    responses:
+ *      '200':
+ *        description: Delete a user
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/User'
+ */
+userRouter.delete('/delete', authMiddleware, userController.deleteUser);
 
 module.exports = userRouter;

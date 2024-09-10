@@ -46,3 +46,25 @@ exports.addUser = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
+
+exports.deleteUser = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    if (!userId) {
+      return res.error(401, '로그인이 필요합니다.', 'Unauthorized');
+    }
+    const user = await prisma.user.delete({
+      where: { id: userId },
+      select: {
+        id: true,
+        email: true,
+        createdAt: true,
+      },
+    });
+
+    res.success(user);
+  } catch (error) {
+    console.error(error);
+    res.error(500, "기록을 삭제하는 중 오류가 발생했습니다.", error.message);
+  }
+};

@@ -53,7 +53,7 @@ model Token {
   id     Int    @id @default(autoincrement())
   token  String @unique
   userId Int
-  user   User   @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model CulturePost {
@@ -69,7 +69,7 @@ model CulturePost {
   detail2    String?
   detail3    String?
   detail4    String?
-  author     User           @relation(fields: [authorId], references: [id])
+  author     User           @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId   Int
   photos     Photo[]
   createdAt  DateTime       @default(now())
@@ -104,8 +104,8 @@ model FollowRequest {
   createdAt  DateTime            @default(now())
   updatedAt  DateTime            @updatedAt
 
-  sender   User @relation("FollowRequestSender", fields: [fromUserId], references: [id])
-  receiver User @relation("FollowRequestReceiver", fields: [toUserId], references: [id])
+  sender   User @relation("FollowRequestSender", fields: [fromUserId], references: [id], onDelete: Cascade)
+  receiver User @relation("FollowRequestReceiver", fields: [toUserId], references: [id], onDelete: Cascade)
 
   @@unique([fromUserId, toUserId])
 }
@@ -116,8 +116,8 @@ model Follow {
   followingId Int
   createdAt   DateTime @default(now())
 
-  follower  User @relation("Following", fields: [followerId], references: [id])
-  following User @relation("Follower", fields: [followingId], references: [id])
+  follower  User @relation("Following", fields: [followerId], references: [id], onDelete: Cascade)
+  following User @relation("Follower", fields: [followingId], references: [id], onDelete: Cascade)
 
   @@unique([followerId, followingId])
 }
@@ -125,7 +125,7 @@ model Follow {
 model Profile {
   id           Int       @id @default(autoincrement())
   userId       Int       @unique
-  user         User      @relation(fields: [userId], references: [id])
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   nickname     String
   bio          String?
   birthdate    DateTime?
@@ -166,7 +166,7 @@ model Bookmark {
   createdAt  DateTime    @default(now())
   updatedAt  DateTime    @updatedAt
 
-  user User   @relation(fields: [userId], references: [id])
+  user User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   post CulturePost @relation(fields: [postId], references: [id], onDelete: Cascade)
 
   @@unique([userId, postId])

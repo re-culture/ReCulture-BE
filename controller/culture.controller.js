@@ -19,9 +19,37 @@ exports.getAllPublicCultures = async (req, res) => {
 exports.searchCultures = async (req, res) => {
   try {
     const searchString = req.query.searchString || '';
-    const cultures = await prisma.culturePost.findMany({
+
+    const page = parseInt(req.query.page) || 1;
+    const pageSize = parseInt(req.query.pageSize) || 10;
+
+    const skip = (page - 1) * pageSize;
+    const take = pageSize;
+    
+    const userId = req.user.id;
+    const [cultures, totalCultures] = await Promise.all([prisma.culturePost.findMany({
       where: {
-        disclosure: DisclosureType.PUBLIC,
+        OR: [
+          {
+            disclosure: DisclosureType.PUBLIC,
+          },
+          {
+            AND: [
+              {
+                disclosure: DisclosureType.FOLLOWER,
+              },
+              {
+                author: {
+                  following: {
+                    some: {
+                      followerId: userId,
+                    },
+                  },
+                },
+              },
+            ],
+          },
+        ],
         OR: [
           {
             title: {
@@ -36,8 +64,60 @@ exports.searchCultures = async (req, res) => {
         ],
       },
       include: { photos: true },
+      skip: skip,
+      take: take,
+      orderBy: {
+        createdAt: 'desc',
+      },
+    }), prisma.culturePost.count({
+      where: {
+        OR: [
+          {
+            disclosure: DisclosureType.PUBLIC,
+          },
+          {
+            AND: [
+              {
+                disclosure: DisclosureType.FOLLOWER,
+              },
+              {
+                author: {
+                  following: {
+                    some: {
+                      followerId: userId,
+                    },
+                  },
+                },
+              },
+            ],
+          },
+        ],
+        OR: [
+          {
+            title: {
+              contains: searchString,
+            },
+          },
+          {
+            review: {
+              contains: searchString,
+            },
+          },
+        ],
+      },
+    })]);
+    
+    const totalPages = Math.ceil(totalCultures / pageSize);
+
+    res.status(200).json({
+      data: cultures,
+      pagination: {
+        currentPage: page,
+        pageSize: pageSize,
+        totalPages: totalPages,
+        totalCultures: totalCultures,
+      },
     });
-    res.status(200).json(cultures);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }

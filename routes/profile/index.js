@@ -178,6 +178,16 @@ profileRouter.put('/add-tick-exp', profileController.addTicketExp);
  *         type: string
  *         required: false
  *         description: User Nickname
+ *     - in: query
+ *       name: page
+ *       schema:
+ *         type: integer
+ *         required: false
+ *     - in: query
+ *       name: pageSize
+ *       schema:
+ *         type: integer
+ *         required: false
  *   responses:
  *     200:
  *      description: Search User Profile

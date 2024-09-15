@@ -82,18 +82,40 @@ exports.getSpeceficProfile = async (req, res) => {
 
 exports.searchProfile = async (req, res) => {
   const nickname = req.query.nickname || '';
+  const page = parseInt(req.query.page) || 1; 
+  const pageSize = parseInt(req.query.pageSize) || 10;
+
+  const skip = (page - 1) * pageSize; 
+  const take = pageSize;
+
   try {
-    const profiles = await prisma.profile.findMany({
-      where: {
-        nickname: {
-          contains: nickname,
+    const [profiles, totalProfiles] = await Promise.all([
+      prisma.profile.findMany({
+        where: {
+          nickname: {
+            contains: nickname,
+          },
         },
-      },
-    });/*
-    if (profiles.length === 0) {
-      return res.error (404, "검색 결과가 없습니다.", "검색 결과가 없습니다.");
-    }*/
-    res.success(profiles);
+        skip: skip,
+        take: take,
+      }),
+      prisma.profile.count({
+        where: {
+          nickname: {
+            contains: nickname,
+          },
+        },
+      })
+    ]);
+
+    const totalPages = Math.ceil(totalProfiles / pageSize);
+
+    res.success(profiles, {
+      "currentPage": page,
+      "pageSize": pageSize,
+      "totalPages": totalPages,
+      "totalProfiles": totalProfiles
+    });
   } catch (error) {
     res.error(500, "유저 검색 중 오류가 발생했습니다.", error.message);
   }

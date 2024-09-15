@@ -1,10 +1,11 @@
 const responseMiddleware = async (req, res, next) => {
-    res.success = (data) => {
+    res.success = (data, pagination) => {
       res.status(200).json({
         timestamp: new Date().toISOString(),
         success: true,
         status: 200,
         data,
+        pagination
       });
     };
   

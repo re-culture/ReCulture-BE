@@ -14,6 +14,15 @@ cultureRouter.use(authMiddleware);
  *     tags: [Culture]
  *     security:
  *      - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *       - in: query
+ *         name: pageSize
+ *         schema:
+ *           type: integer
  *     responses:
  *       200:
  *         description: Get all public cultures

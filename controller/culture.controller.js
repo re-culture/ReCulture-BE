@@ -399,6 +399,62 @@ exports.getMyCalendar = async (req, res) => {
   }
 };
 
+exports.getRecommendCulture = async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    const page = parseInt(req.query.page) || 1;
+    const pageSize = parseInt(req.query.pageSize) || 10;
+
+    const ret = await fetch(`${process.env.AI_API_URL}/recommend?userId=${userId}`);
+    const data = await ret.json();
+
+    // 필터링 조건
+    const filteredCultures = data.filter(culture => {
+      if (culture.authorId === userId) {
+        return false;
+      }
+      // 공개된 문화 게시물 또는 팔로워 전용 게시물
+      if (culture.disclosure === 'PUBLIC') {
+        return true; // PUBLIC은 누구나 볼 수 있음
+      } else if (culture.disclosure === 'FOLLOWER') {
+        // 팔로워 전용 게시물은 해당 사용자가 팔로워인지 확인
+        return culture.author.following.some(follower => follower.followerId === userId);
+      }
+      return false;
+    }).map(culture => culture.id);
+
+    const skip = (page - 1) * pageSize;
+    const pageIds = filteredCultures.slice(skip, skip + pageSize);
+
+    let cultures = await prisma.culturePost.findMany({
+      where: {
+        id: {
+          in: pageIds,
+        },
+      },
+      include: { photos: true },
+    });
+
+    cultures = pageIds.map(id => cultures.find(culture => culture.id === id));
+
+    const totalCultures = filteredCultures.length;
+    const totalPages = Math.ceil(totalCultures / pageSize);
+
+    res.status(200).json({
+      data: cultures,
+      pagination: {
+        currentPage: page,
+        pageSize: pageSize,
+        totalPages: totalPages,
+        totalCultures: totalCultures,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 exports.postCulture = async (req, res) => {
   if (!req.files) {
     return res.status(400).json({ error: 'Please upload a file' });

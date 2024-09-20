@@ -185,6 +185,35 @@ cultureRouter.get('/my-calendar', cultureController.getMyCalendar);
 
 /**
  * @swagger
+ * /culture/recommend:
+ *   get:
+ *     summary: Get my recommend cultures
+ *     tags: [Culture]
+ *     security:
+ *      - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *       - in: query
+ *         name: pageSize
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Get my recommended cultures
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Culture'
+ *  */
+cultureRouter.get('/recommend', cultureController.getRecommendCulture);
+
+/**
+ * @swagger
  * /culture/{id}:
  *   get:
  *     summary: Get specific culture post

@@ -269,6 +269,9 @@ exports.getMyCulture = async (req, res) => {
         authorId,
       },
       include: { photos: true },
+      orderBy: {
+        createdAt: 'desc',
+      },
     });
     res.status(200).json(cultures);
   } catch (error) {

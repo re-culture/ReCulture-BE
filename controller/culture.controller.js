@@ -227,15 +227,110 @@ exports.getUserCulture = async (req, res) => {
 
 exports.getCategoryCulture = async (req, res) => {
   try {
+    const userId = req.user.id;
     const id = parseInt(req.params.id);
-    const cultures = await prisma.culturePost.findMany({
-      where: {
-        categoryId: id,
-        disclosure: DisclosureType.PUBLIC,
+
+    // 페이지와 페이지 크기 파라미터 (기본값 설정)
+    const page = parseInt(req.query.page) || 1;
+    const pageSize = parseInt(req.query.pageSize) || 10;
+
+    const skip = (page - 1) * pageSize;
+    const take = pageSize;
+
+    const [cultures, totalCultures] = await Promise.all([
+      prisma.culturePost.findMany({
+        where: {
+          AND: [
+            {
+              categoryId: id,
+            },
+            {
+              NOT: {
+                authorId: userId,
+              }
+            },
+            {
+              OR: [
+                {
+                  disclosure: DisclosureType.PUBLIC,
+                },
+                {
+                  AND: [
+                    {
+                      disclosure: DisclosureType.FOLLOWER,
+                    },
+                    {
+                      author: {
+                        following: {
+                          some: {
+                            followerId: userId,
+                          },
+                        },
+                      },
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+        include: { photos: true },
+        skip: skip,
+        take: take,
+        orderBy: {
+          createdAt: 'desc', // 최신순 정렬
+        },
+      }),
+      prisma.culturePost.count({
+        where: {
+          AND: [
+            {
+              categoryId: id,
+            },
+            {
+              NOT: {
+                authorId: userId,
+              }
+            },
+            {
+              OR: [
+                {
+                  disclosure: DisclosureType.PUBLIC,
+                },
+                {
+                  AND: [
+                    {
+                      disclosure: DisclosureType.FOLLOWER,
+                    },
+                    {
+                      author: {
+                        following: {
+                          some: {
+                            followerId: userId,
+                          },
+                        },
+                      },
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      })
+    ]);
+
+    const totalPages = Math.ceil(totalCultures / pageSize);
+
+    res.status(200).json({
+      data: cultures,
+      pagination: {
+        currentPage: page,
+        pageSize: pageSize,
+        totalPages: totalPages,
+        totalCultures: totalCultures,
       },
-      include: { photos: true },
     });
-    res.status(200).json(cultures);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }

@@ -110,6 +110,14 @@ cultureRouter.get('/user/:id', cultureController.getUserCulture);
  *        type: integer
  *        required: true
  *        description: Category Id
+ *      - in: query
+ *        name: page
+ *        schema:
+ *          type: integer
+ *      - in: query
+ *        name: pageSize
+ *        schema:
+ *          type: integer
  *     responses:
  *       200:
  *         description: Get all Category public cultures

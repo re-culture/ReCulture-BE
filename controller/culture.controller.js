@@ -137,23 +137,32 @@ exports.getAllAccessibleCultures = async (req, res) => {
     const [cultures, totalCultures] = await Promise.all([
       prisma.culturePost.findMany({
         where: {
-          OR: [
+          AND: [
             {
-              disclosure: DisclosureType.PUBLIC,
+              NOT: {
+                authorId: userId,
+              }
             },
             {
-              AND: [
+              OR: [
                 {
-                  disclosure: DisclosureType.FOLLOWER,
+                  disclosure: DisclosureType.PUBLIC,
                 },
                 {
-                  author: {
-                    following: {
-                      some: {
-                        followerId: userId,
+                  AND: [
+                    {
+                      disclosure: DisclosureType.FOLLOWER,
+                    },
+                    {
+                      author: {
+                        following: {
+                          some: {
+                            followerId: userId,
+                          },
+                        },
                       },
                     },
-                  },
+                  ],
                 },
               ],
             },
@@ -168,23 +177,32 @@ exports.getAllAccessibleCultures = async (req, res) => {
       }),
       prisma.culturePost.count({
         where: {
-          OR: [
+          AND: [
             {
-              disclosure: DisclosureType.PUBLIC,
+              NOT: {
+                authorId: userId,
+              }
             },
             {
-              AND: [
+              OR: [
                 {
-                  disclosure: DisclosureType.FOLLOWER,
+                  disclosure: DisclosureType.PUBLIC,
                 },
                 {
-                  author: {
-                    following: {
-                      some: {
-                        followerId: userId,
+                  AND: [
+                    {
+                      disclosure: DisclosureType.FOLLOWER,
+                    },
+                    {
+                      author: {
+                        following: {
+                          some: {
+                            followerId: userId,
+                          },
+                        },
                       },
                     },
-                  },
+                  ],
                 },
               ],
             },

@@ -446,7 +446,7 @@ exports.getRecommendCulture = async (req, res) => {
     const page = parseInt(req.query.page) || 1;
     const pageSize = parseInt(req.query.pageSize) || 10;
 
-    const ret = await fetch(`${process.env.AI_API_URL}/recommend?userId=${userId}`);
+    const ret = await fetch(`${process.env.AI_API_URL}/recommend?user_id=${userId}`);
     const data = await ret.json();
 
     // 필터링 조건

@@ -176,6 +176,8 @@ ticketRouter.get('/:id', ticketController.getDetailTicket);
  *                 type: string
  *               review:
  *                 type: string
+ *               frameId:
+ *                 type: integer
  *               photos:
  *                 type: array
  *                 items:

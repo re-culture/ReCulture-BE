@@ -156,7 +156,7 @@ exports.postTicket = async (req, res) => {
     return res.status(400).json({ error: 'Please upload a file' });
   }
   try {
-    const { title, emoji, date, categoryId, disclosure, review } = req.body;
+    const { title, emoji, date, categoryId, disclosure, review, frameId } = req.body;
     const authorId = req.user.id;
     const ticket = await prisma.ticketPost.create({
       data: {
@@ -167,6 +167,7 @@ exports.postTicket = async (req, res) => {
         authorId,
         disclosure,
         review,
+        frameId: parseInt(frameId),
       },
     });
     const photoDocs = req.files.map((file) => ({

@@ -617,6 +617,9 @@ exports.putCulture = async (req, res) => {
       return { culture, photoDocs };
     });
     
+    fetch(`${process.env.AI_API_URL}/update-cache?user_id=${authorId}`, {
+      method: 'POST',
+    });
     res.success(result);
   } catch (error) {
     console.error(error);
@@ -638,6 +641,9 @@ exports.deleteCulture = async (req, res) => {
       where: { id, authorId },
     });
 
+    fetch(`${process.env.AI_API_URL}/update-cache?user_id=${authorId}`, {
+      method: 'POST',
+    });
     res.success(culture);
   } catch (error) {
     console.error(error);

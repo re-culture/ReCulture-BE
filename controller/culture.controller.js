@@ -616,7 +616,7 @@ exports.putCulture = async (req, res) => {
       });
       return { culture, photoDocs };
     });
-    
+   
     fetch(`${process.env.AI_API_URL}/update-cache?user_id=${authorId}`, {
       method: 'POST',
     });

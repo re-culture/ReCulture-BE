@@ -540,6 +540,9 @@ exports.postCulture = async (req, res) => {
 
     await addExp(authorId, 10);
 
+    fetch(`${process.env.AI_API_URL}/update-cache?user_id=${authorId}`, {
+      method: 'POST',
+    });
     res.status(200).json({ culture, photoDocs });
   } catch (error) {
     res.status(400).json({ error: error.message });

@@ -12,15 +12,15 @@ exports.addExp = async (userId, point) => {
     const exp = profile.exp + point;
     let levelId = profile.levelId;
     let level = profile.level;
-    if (exp >= 50) {
-      levelId = 2;
-      level = LevelName.Sophomore;
+    if (exp >= 300) {
+      levelId = 4;
+      level = LevelName.Senior;
     } else if (exp >= 150) {
       levelId = 3;
       level = LevelName.Junior;
-    } else if (exp >= 300) {
-      levelId = 4;
-      level = LevelName.Senior;
+    } else if (exp >= 50) {
+      levelId = 2;
+      level = LevelName.Sophomore;
     }
     await prisma.profile.update({
       where: { userId: parseInt(userId) },

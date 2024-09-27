@@ -76,6 +76,11 @@ model CulturePost {
   updatedAt  DateTime       @updatedAt
 
   Bookmark Bookmark[]
+
+  @@index([createdAt, authorId])
+  @@index([authorId, date])
+  @@index([title])
+  @@index([review])
 }
 
 model CategoryDetail {

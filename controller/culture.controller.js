@@ -252,12 +252,36 @@ exports.getAllAccessibleCultures = async (req, res) => {
 exports.getUserCulture = async (req, res) => {
   try {
     const id = parseInt(req.params.id);
+    const userId = req.user.id;
     const cultures = await prisma.culturePost.findMany({
       where: {
         authorId: id,
-        disclosure: DisclosureType.FOLLOWER,
+        OR: [
+          {
+            disclosure: DisclosureType.PUBLIC,
+          },
+          {
+            AND: [
+              {
+                disclosure: DisclosureType.FOLLOWER,
+              },
+              {
+                author: {
+                  following: {
+                    some: {
+                      followerId: userId,
+                    },
+                  },
+                },
+              },
+            ],
+          },
+        ],
       },
       include: { photos: true },
+      orderBy: {
+        createdAt: 'desc',
+      },
     });
     res.status(200).json(cultures);
   } catch (error) {

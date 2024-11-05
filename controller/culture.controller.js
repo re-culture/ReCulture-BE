@@ -472,7 +472,8 @@ exports.getRecommendCulture = async (req, res) => {
 
     const ret = await fetch(`${process.env.AI_API_URL}/recommend?user_id=${userId}`);
     const data = await ret.json();
-
+    //const cultureIds = data.map((culture) => culture.id);
+    /*
     // 필터링 조건
     const filteredCultures = data.filter(culture => {
       if (culture.authorId === userId) {
@@ -487,10 +488,59 @@ exports.getRecommendCulture = async (req, res) => {
       }
       return false;
     }).map(culture => culture.id);
+    */
+
+    const allCultures = await prisma.culturePost.findMany({
+      where: {
+        AND: [
+          {
+            NOT: {
+              authorId: userId,
+            }
+          },
+          {
+            OR: [
+              {
+                disclosure: DisclosureType.PUBLIC,
+              },
+              {
+                AND: [
+                  {
+                    disclosure: DisclosureType.FOLLOWER,
+                  },
+                  {
+                    author: {
+                      following: {
+                        some: {
+                          followerId: userId,
+                        },
+                      },
+                    },
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+      include: { photos: true },
+    });
+
+    // 필요한 개수만큼 순서대로 cultures를 찾기
+    let orderedCultures = [];
+    for (let ret of data) {
+      const culture = allCultures.find(c => c.id === ret.id);
+      if (culture) {
+        orderedCultures.push(culture);
+      }
+      if (orderedCultures.length >= page * pageSize) {
+        break;  // 필요한 개수를 채우면 검색 중단
+      }
+    }
 
     const skip = (page - 1) * pageSize;
-    const pageIds = filteredCultures.slice(skip, skip + pageSize);
-
+    const cultures = orderedCultures.slice(skip, skip + pageSize);
+/*
     let cultures = await prisma.culturePost.findMany({
       where: {
         id: {
@@ -500,9 +550,9 @@ exports.getRecommendCulture = async (req, res) => {
       include: { photos: true },
     });
 
-    cultures = pageIds.map(id => cultures.find(culture => culture.id === id));
+    cultures = pageIds.map(id => cultures.find(culture => culture.id === id));*/
 
-    const totalCultures = filteredCultures.length;
+    const totalCultures = allCultures.length;
     const totalPages = Math.ceil(totalCultures / pageSize);
 
     res.status(200).json({

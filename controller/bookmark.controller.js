@@ -36,6 +36,10 @@ exports.toggleBookmark = async (req, res) => {
                 return { added: true, bookmark };
             }
         });
+       
+        fetch(`${process.env.AI_API_URL}/update-bookmark?user_id=${userId}`, {
+            method: 'POST',
+        }); 
         res.success(result);
     } catch (error) {
         console.error(error);

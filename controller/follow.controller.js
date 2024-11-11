@@ -1,6 +1,6 @@
-const prisma = require('../lib/prisma');
-const { FollowRequestStatus } = require('@prisma/client');
-const { exclude } = require('../utils/excludeField');
+const prisma = require("../lib/prisma");
+const { FollowRequestStatus } = require("@prisma/client");
+const { exclude } = require("../utils/excludeField");
 
 exports.sendFollowRequest = async (req, res) => {
   try {
@@ -38,7 +38,7 @@ exports.acceptFollowRequest = async (req, res) => {
           status: FollowRequestStatus.PENDING,
         },
       });
-      res.status(401).json({ error: 'You are not authorized' });
+      res.status(401).json({ error: "You are not authorized" });
       return;
     }
     const follow = await prisma.follow.create({
@@ -73,7 +73,7 @@ exports.rejectFollowRequest = async (req, res) => {
           status: FollowRequestStatus.PENDING,
         },
       });
-      res.status(401).json({ error: 'You are not authorized' });
+      res.status(401).json({ error: "You are not authorized" });
       return;
     }
     res.status(200).json(followRequest);
@@ -137,7 +137,7 @@ exports.getMyFollowers = async (req, res) => {
       },
     });
     const filteredFollowers = followers.map((follower) => {
-      const followerWithoutPassword = exclude(follower.follower, ['password']);
+      const followerWithoutPassword = exclude(follower.follower, ["password"]);
       return { ...follower, follower: followerWithoutPassword };
     });
     res.status(200).json(filteredFollowers);
@@ -159,12 +159,44 @@ exports.getMyFollwings = async (req, res) => {
     });
     const filteredFollowings = followings.map((following) => {
       const followingWithoutPassword = exclude(following.following, [
-        'password',
+        "password",
       ]);
       return { ...following, following: followingWithoutPassword };
     });
     res.status(200).json(filteredFollowings);
   } catch (error) {
     res.status(400).json({ error: error.message });
+  }
+};
+
+exports.unfollow = async (req, res) => {
+  try {
+    const { followerId } = req.params;
+    const followingId = req.user.id;
+
+    const follow = await prisma.follow.findUnique({
+      where: {
+        followerId_followingId: {
+          followerId: parseInt(followerId),
+          followingId,
+        },
+      },
+    });
+
+    if (follow) {
+      await prisma.follow.delete({
+        where: {
+          followerId_followingId: {
+            followerId: parseInt(followerId),
+            followingId,
+          },
+        },
+      });
+      return res.status(200).json({ message: 'User unfollowed successfully' });
+    }
+
+    res.status(200).json({ message: 'No follow relationship exists.' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 };

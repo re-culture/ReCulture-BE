@@ -184,4 +184,33 @@ followRouter.get('/followers', followController.getMyFollowers);
  *  */
 followRouter.get('/followings', followController.getMyFollwings);
 
+/**
+ * @swagger
+ * /follow/unfollow/{followerId}:
+ *   delete:
+ *     summary: Unfollow User
+ *     tags: [Follow]
+ *     security:
+ *      - bearerAuth: []
+ *     parameters:
+ *      - in: path
+ *        name: followerId
+ *        schema:
+ *        type: integer
+ *        required: true
+ *        description: unfollow user id
+ *     responses:
+ *       200:
+ *         description: Unfollow User
+ *         content:
+ *           application/json:
+ *             body:
+ *              type: object
+ *              properties:
+ *               message:
+ *               type: string
+ *               example: User unfollowed successfully
+ *  */
+followRouter.delete('/unfollow/:followerId', followController.unfollow);
+
 module.exports = followRouter;
